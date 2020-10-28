@@ -1,25 +1,36 @@
 package com.example.leftoverkiller.model;
 
+import com.google.gson.annotations.SerializedName;
+
 import java.util.List;
 
 public class Recipe {
 
+    @SerializedName("recipe_id")
     int recipeId;
 
+    @SerializedName("recipe_name")
     String name;
 
+    @SerializedName("ingredients")
     List<Ingredient> ingredients;
 
+    @SerializedName("imageURL")
     String imageURL;
 
-    String procedure;
+    @SerializedName("instructions")
+    String instructions;
 
-    public Recipe(int recipeId, String name, List<Ingredient> ingredients, String imageUrl, String procedure) {
+    @SerializedName("success")
+    Boolean success;
+
+    public Recipe(int recipeId, String name, List<Ingredient> ingredients, String imageURL, String instructions, Boolean success) {
         this.recipeId = recipeId;
         this.name = name;
         this.ingredients = ingredients;
-        this.imageURL = imageUrl;
-        this.procedure = procedure;
+        this.imageURL = imageURL;
+        this.instructions = instructions;
+        this.success = success;
     }
 
     public int getRecipeId() {
@@ -38,7 +49,7 @@ public class Recipe {
         return imageURL;
     }
 
-    public String getProcedure() {
-        return procedure;
+    public String getInstructions() {
+        return instructions;
     }
 }
