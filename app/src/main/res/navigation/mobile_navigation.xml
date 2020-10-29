@@ -7,7 +7,7 @@
 
     <fragment
         android:id="@+id/navigation_search_recipes"
-        android:name="com.example.leftoverkiller.ui.home.HomeFragment"
+        android:name="com.example.leftoverkiller.ui.home.SearchRecipesFragment"
         android:label="@string/title_searchByRecipes"
         tools:layout="@layout/fragment_search_recipes" />
 
