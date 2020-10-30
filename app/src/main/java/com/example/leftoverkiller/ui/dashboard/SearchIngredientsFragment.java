@@ -38,8 +38,6 @@ import retrofit2.Response;
 
 public class SearchIngredientsFragment extends Fragment {
 
-    private DashboardViewModel dashboardViewModel;
-
     // Floating Action Button
     FloatingActionButton fabSearch;
     Button addIngredient;
@@ -58,8 +56,6 @@ public class SearchIngredientsFragment extends Fragment {
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
-        dashboardViewModel =
-                ViewModelProviders.of(this).get(DashboardViewModel.class);
         View root = inflater.inflate(R.layout.fragment_search_ingredients, container, false);
 
         return root;
