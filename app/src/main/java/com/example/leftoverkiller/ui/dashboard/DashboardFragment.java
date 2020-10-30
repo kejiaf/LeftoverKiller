@@ -9,6 +9,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 import android.widget.Button;
@@ -17,13 +18,25 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.arch.lifecycle.ViewModelProviders;
+import android.widget.Toast;
 
 import com.example.leftoverkiller.IngredientSearchActivity;
 import com.example.leftoverkiller.R;
 import com.example.leftoverkiller.application.IngredientsAdapter;
+import com.example.leftoverkiller.application.LeftoverKillerApplication;
+import com.example.leftoverkiller.model.Ingredient;
+import com.example.leftoverkiller.model.IngredientListResponse;
 
 import java.util.ArrayList; //TODO: remove once placeholder is changed
 import java.util.Arrays;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 public class DashboardFragment extends Fragment {
 
@@ -37,7 +50,12 @@ public class DashboardFragment extends Fragment {
     private RecyclerView recyclerView;
     private RecyclerView.Adapter mAdapter;
     private RecyclerView.LayoutManager layoutManager;
-    private ArrayList<String> ingredientDataset = new ArrayList<>(Arrays.asList("ingredient 1", "ingredient 2", "ingredient 3", "ingredient 4", "ingredient 5")); // TODO: placeholder!
+    private ArrayList<String> selectedIngredientDataset = new ArrayList<>(); // TODO: placeholder!
+    private List<Ingredient> availableIngredients;
+    private AutoCompleteTextView autoTextView;
+    private Set<String> availableIngredientSet = new HashSet();
+    private Set<String> selectedIngredientSet = new HashSet();
+
     //private ArrayList<String> ingredientDataset = null;
 
     public View onCreateView(@NonNull LayoutInflater inflater,
@@ -67,57 +85,74 @@ public class DashboardFragment extends Fragment {
         recyclerView.setNestedScrollingEnabled(false);
 
         // Set recycler layout manager
-        layoutManager = new LinearLayoutManager( getActivity() );
+        layoutManager = new LinearLayoutManager(getActivity());
         recyclerView.setLayoutManager(layoutManager);
 
         // If dataset is not null, add adapter
-        buildRecyclerView(ingredientDataset);
+        buildRecyclerView();
 
-        // Set up autocomplete text view
-        ArrayAdapter<String> autoTextAdapter = new ArrayAdapter<String>( getContext(),
-                android.R.layout.simple_dropdown_item_1line, ingredientDataset );
-        final AutoCompleteTextView autoTextView = (AutoCompleteTextView)
+
+        autoTextView = (AutoCompleteTextView)
                 getView().findViewById(R.id.ingredients_search_auto_complete);
-        autoTextView.setAdapter(autoTextAdapter);
+        autoTextView.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
+                Log.d("AUTOTEXTVIEW", "TEST");
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> adapterView) {
+                Log.d("AUTOTEXTVIEW", "TEST");
+            }
+        });
+
+        autoTextView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+                addToRecyclerView(availableIngredients.get(i).getName());
+//                Log.d("AUTOTEXTVIEW", "TEST");
+            }
+        });
 
         // Set up autocomplete text view and corresponding add button to correct dimensions
         View parent = (View) autoTextView.getParent();
-        autoTextView.setWidth( (int)( parent.getWidth()  * 0.9 ) ); // 90% of width
-        addIngredient.setWidth( (int)( parent.getWidth()  * 0.1 ) ); // 10% of width
+        autoTextView.setWidth((int) (parent.getWidth() * 0.9)); // 90% of width
+        addIngredient.setWidth((int) (parent.getWidth() * 0.1)); // 10% of width
 
+
+        callAPI();
         // Set up floating action button
         // TODO: search for recipes!
         fabSearch.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View view)
-            {
-                getActivity().startActivity( new Intent(getActivity(), IngredientSearchActivity.class) );
+            public void onClick(View view) {
+                getActivity().startActivity(new Intent(getActivity(), IngredientSearchActivity.class));
             }
         });
 
         // Set up add ingredient button
         addIngredient.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View view)
-            {
+            public void onClick(View view) {
                 // TODO: implement with endpoints
                 String enteredIngredient = autoTextView.getText().toString();
-                addToRecyclerView( enteredIngredient );
+                addToRecyclerView(enteredIngredient);
             }
         });
     }
 
-    private void buildRecyclerView(ArrayList<String> ingredientDataset) {
+
+    private void buildRecyclerView() {
         // If dataset is not null, add adapter
-        if (ingredientDataset != null) {
-            Log.i("ingredientlist", "ingredient data not null with size " + ingredientDataset.size());
+        if (selectedIngredientDataset != null) {
+            Log.i("ingredientlist", "ingredient data not null with size " + selectedIngredientDataset.size());
             // Adapter for recycler view
-            mAdapter = new IngredientsAdapter(ingredientDataset);
+            mAdapter = new IngredientsAdapter(selectedIngredientDataset, selectedIngredientSet);
             recyclerView.setAdapter(mAdapter);
         }
 
         // Hide recycler view if empty and replace with an empty dataset message
-        if (ingredientDataset == null || ingredientDataset.size() == 0) {
+        if (selectedIngredientDataset == null || selectedIngredientDataset.size() == 0) {
             TextView tvEmptyWarning = getView().findViewById(R.id.tv_empty_view_warning);
             recyclerView.setVisibility(View.GONE);
             tvEmptyWarning.setVisibility(View.VISIBLE);
@@ -128,10 +163,44 @@ public class DashboardFragment extends Fragment {
         }
     }
 
-    private void addToRecyclerView( String ingredient )
-    {
-        // TODO: implement with endpoints
-        ingredientDataset.add( ingredient );
+    private void callAPI() {
+
+        Call<IngredientListResponse> call = ((LeftoverKillerApplication) getActivity().getApplication()).apiService.getIngredients();
+        call.enqueue(new Callback<IngredientListResponse>() {
+            @Override
+            public void onResponse(Call<IngredientListResponse> call, Response<IngredientListResponse> response) {
+                if (response.body().getIngredients() != null) {
+                    availableIngredients = response.body().getIngredients();
+                    availableIngredientSet.clear();
+                    List<String> ingredientList = new ArrayList<>();
+                    for (Ingredient ingredient : availableIngredients) {
+                        ingredientList.add(ingredient.getName());
+                        availableIngredientSet.add(ingredient.getName());
+                    }
+                    // Set up autocomplete text view
+                    ArrayAdapter<String> autoTextAdapter = new ArrayAdapter<String>(getContext(),
+                            android.R.layout.simple_dropdown_item_1line, ingredientList);
+                    autoTextView.setAdapter(autoTextAdapter);
+                }
+            }
+
+            @Override
+            public void onFailure(Call<IngredientListResponse> call, Throwable t) {
+                Toast.makeText(getActivity(), "Please check your network connection!", Toast.LENGTH_SHORT).show();
+            }
+        });
+    }
+
+    private void addToRecyclerView(String ingredient) {
+        if (!availableIngredientSet.contains(ingredient)) {
+            Toast.makeText(getActivity(), "Ingredient not available", Toast.LENGTH_SHORT).show();
+            return;
+        }
+
+        if (selectedIngredientSet.contains(ingredient))
+            return;
+        selectedIngredientDataset.add(ingredient);
+        selectedIngredientSet.add(ingredient);
         mAdapter.notifyDataSetChanged();
     }
 }

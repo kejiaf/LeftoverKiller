@@ -10,6 +10,8 @@ import android.view.View;
 import android.widget.TextView;
 
 import com.example.leftoverkiller.application.IngredientsAdapter;
+import com.example.leftoverkiller.application.MatchingRecipeAdapter;
+import com.example.leftoverkiller.application.RecipesAdapter;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -49,7 +51,7 @@ public class IngredientSearchActivity extends AppCompatActivity
         if (recipeDataset != null) {
             Log.i("ingredientlist", "ingredient data not null with size " + recipeDataset.size());
             // Adapter for recycler view
-            mAdapter = new IngredientsAdapter(recipeDataset);
+            mAdapter = new MatchingRecipeAdapter(recipeDataset);
             recyclerView.setAdapter(mAdapter);
         }
 

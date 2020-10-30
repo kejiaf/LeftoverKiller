@@ -11,11 +11,9 @@ import retrofit2.http.POST;
 
 public interface LeftoverKillerInterface {
 
-    @FormUrlEncoded
     @POST("get_recipes.php")
     Call<RecipeListResponse> getRecipes();
 
-    @FormUrlEncoded
     @POST("get_ingredients.php")
     Call<IngredientListResponse> getIngredients();
 

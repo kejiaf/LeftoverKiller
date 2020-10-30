@@ -1,23 +1,23 @@
 package com.example.leftoverkiller.application;
 
-import android.content.Intent;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
-import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
-import android.graphics.Color;
 
 import com.example.leftoverkiller.R;
+import com.example.leftoverkiller.model.Ingredient;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 
 public class IngredientsAdapter extends
-        RecyclerView.Adapter<com.example.leftoverkiller.application.IngredientsAdapter.MyViewHolder>
+        RecyclerView.Adapter<IngredientsAdapter.MyViewHolder>
 {
     private List<String> ingredientsDataset; //TODO: change to Ingredient later
+    Set<String> ingredientSet;
     public boolean areItemsClickable = false;
 
     // Provide a reference to the views for each data item
@@ -35,8 +35,9 @@ public class IngredientsAdapter extends
     }
 
     // Provide a suitable constructor (depends on the kind of dataset)
-    public IngredientsAdapter(List<String> ingredientsDataset) {
+    public IngredientsAdapter(ArrayList<String> ingredientsDataset, Set<String> selectedIngredientSet) {
         this.ingredientsDataset = ingredientsDataset;
+        this.ingredientSet = selectedIngredientSet;
     }
 
     // Create new views (invoked by the layout manager)
