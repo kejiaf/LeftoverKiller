@@ -4,4 +4,5 @@
     <string name="title_SearchByIngredients">SearchByIngredients</string>
     <string name="title_favRecipes">favRecipes</string>
     <string name="warn_no_ingredient_selected">No ingredient has been selected</string>
+    <string name="warn_no_recipes_ingredients_found">No recipes with specified ingredients found</string>
 </resources>

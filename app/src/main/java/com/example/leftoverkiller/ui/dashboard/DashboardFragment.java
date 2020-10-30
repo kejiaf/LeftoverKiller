@@ -1,24 +1,24 @@
 package com.example.leftoverkiller.ui.dashboard;
 
-import android.app.SearchManager;
-import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.SearchView;
+import android.widget.ArrayAdapter;
+import android.widget.AutoCompleteTextView;
+import android.widget.Button;
 import android.widget.TextView;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
-import android.arch.lifecycle.Observer;
 import android.arch.lifecycle.ViewModelProviders;
 
+import com.example.leftoverkiller.IngredientSearchActivity;
 import com.example.leftoverkiller.R;
 import com.example.leftoverkiller.application.IngredientsAdapter;
 
@@ -30,7 +30,8 @@ public class DashboardFragment extends Fragment {
     private DashboardViewModel dashboardViewModel;
 
     // Floating Action Button
-    FloatingActionButton fab;
+    FloatingActionButton fabSearch;
+    Button addIngredient;
 
     // Recycler view stuff
     private RecyclerView recyclerView;
@@ -53,7 +54,10 @@ public class DashboardFragment extends Fragment {
         super.onViewCreated(view, savedInstanceState);
 
         // Get floating action button in layout
-        fab = getView().findViewById(R.id.fab_search_recipes);
+        fabSearch = getView().findViewById(R.id.fab_search_recipes);
+
+        // Get add ingredients button
+        addIngredient = getView().findViewById(R.id.b_add_ingredient);
 
         // Get recycler view
         recyclerView = (RecyclerView) getView().findViewById(R.id.ingredients_recycler_view);
@@ -66,29 +70,44 @@ public class DashboardFragment extends Fragment {
         layoutManager = new LinearLayoutManager( getActivity() );
         recyclerView.setLayoutManager(layoutManager);
 
-        // TODO: empty dataset message if dataset is empty
         // If dataset is not null, add adapter
-        buildRecyclerView();
+        buildRecyclerView(ingredientDataset);
 
-        // Get the SearchView and set the searchable configuration
-        SearchManager searchManager = (SearchManager) getActivity().getSystemService(Context.SEARCH_SERVICE);
-        SearchView searchView = (SearchView) getView().findViewById(R.id.ingredients_search_view);
-        // current activity is the searchable activity
-        searchView.setSearchableInfo( searchManager.getSearchableInfo( getActivity().getComponentName() ) );
-        searchView.setIconifiedByDefault(false); // Do not iconify the widget; expand it by default
+        // Set up autocomplete text view
+        ArrayAdapter<String> autoTextAdapter = new ArrayAdapter<String>( getContext(),
+                android.R.layout.simple_dropdown_item_1line, ingredientDataset );
+        final AutoCompleteTextView autoTextView = (AutoCompleteTextView)
+                getView().findViewById(R.id.ingredients_search_auto_complete);
+        autoTextView.setAdapter(autoTextAdapter);
+
+        // Set up autocomplete text view and corresponding add button to correct dimensions
+        View parent = (View) autoTextView.getParent();
+        autoTextView.setWidth( (int)( parent.getWidth()  * 0.9 ) ); // 90% of width
+        addIngredient.setWidth( (int)( parent.getWidth()  * 0.1 ) ); // 10% of width
 
         // Set up floating action button
         // TODO: search for recipes!
-        fab.setOnClickListener(new View.OnClickListener() {
+        fabSearch.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View view) {
-                Snackbar.make(view, "Here's a Snackbar", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
+            public void onClick(View view)
+            {
+                getActivity().startActivity( new Intent(getActivity(), IngredientSearchActivity.class) );
+            }
+        });
+
+        // Set up add ingredient button
+        addIngredient.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view)
+            {
+                // TODO: implement with endpoints
+                String enteredIngredient = autoTextView.getText().toString();
+                addToRecyclerView( enteredIngredient );
             }
         });
     }
 
-    private void buildRecyclerView() {
+    private void buildRecyclerView(ArrayList<String> ingredientDataset) {
         // If dataset is not null, add adapter
         if (ingredientDataset != null) {
             Log.i("ingredientlist", "ingredient data not null with size " + ingredientDataset.size());
@@ -107,5 +126,12 @@ public class DashboardFragment extends Fragment {
             recyclerView.setVisibility(View.VISIBLE);
             tvEmptyWarning.setVisibility(View.GONE);
         }
+    }
+
+    private void addToRecyclerView( String ingredient )
+    {
+        // TODO: implement with endpoints
+        ingredientDataset.add( ingredient );
+        mAdapter.notifyDataSetChanged();
     }
 }
