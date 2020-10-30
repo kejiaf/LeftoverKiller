@@ -33,6 +33,10 @@ public class RecipesAdapter extends
             linearLayout = v;
         }
     }
+    
+    public List<Recipe> getRecipesList(){
+        return recipesListAll;
+    }
 
     public RecipesAdapter(List<Recipe> recipesList) {
         this.recipesList = recipesList;
