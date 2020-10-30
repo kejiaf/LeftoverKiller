@@ -43,21 +43,15 @@ import retrofit2.Response;
 
 public class SearchRecipesFragment extends Fragment {
 
-    private SearchRecipesViewModel searchRecipesViewModel;
 
     private RecyclerView recyclerView;
     private RecipesAdapter mAdapter;
     private RecyclerView.LayoutManager layoutManager;
     private SearchView searchView;
-    //private ArrayList<String> recipesList =
-      //      new ArrayList<>(Arrays.asList("chicken", "roast", "orange juice", "chiashh", "kriso", "beef", "beef 1", "beef 2", "beef 3",
-        //            "chicken 1", "chicken 2", "chicken 3", "carrot", "carrot 1", "carrot 2", "carrot 3", "potato", "potato 1", "potato 2",
-          //          "potato 3", "rice", "rice 1", "rice 2", "rice 3"));
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
-        searchRecipesViewModel =
-                ViewModelProviders.of(this).get(SearchRecipesViewModel.class);
+
         View root = inflater.inflate(R.layout.fragment_search_recipes, container, false);
         setHasOptionsMenu(true);
         return root;

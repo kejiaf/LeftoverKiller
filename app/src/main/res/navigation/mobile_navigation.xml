@@ -13,7 +13,7 @@
 
     <fragment
         android:id="@+id/navigation_search_ingredients"
-        android:name="com.example.leftoverkiller.ui.dashboard.DashboardFragment"
+        android:name="com.example.leftoverkiller.ui.dashboard.SearchIngredientsFragment"
         android:label="@string/title_SearchByIngredients"
         tools:layout="@layout/fragment_search_ingredients" />
 

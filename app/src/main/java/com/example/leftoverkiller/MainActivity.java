@@ -37,31 +37,6 @@ public class MainActivity extends AppCompatActivity {
         NavigationUI.setupActionBarWithNavController(this, navController, appBarConfiguration);
         NavigationUI.setupWithNavController(navView, navController);
 
-        List<String> ingredientList = new ArrayList<>();
-        ingredientList.add("salt");
-        ingredientList.add("paprika");
-        ingredientList.add("cardamom");
-        ingredientList.add("coriander");
-        ingredientList.add("ground black pepper");
-        ingredientList.add("grapeseed oil");
-        ingredientList.add("maple syrup");
-        ingredientList.add("salmon fillet");
-
-        IngredientListRequest request = new IngredientListRequest(ingredientList);
-        Call<RecipeListResponse> call = ((LeftoverKillerApplication) getApplication()).apiService.getMatchingRecipes(request);
-
-        call.enqueue(new Callback<RecipeListResponse>() {
-            @Override
-            public void onResponse(Call<RecipeListResponse> call, Response<RecipeListResponse> response) {
-                Log.d("RECIPES", response.body().toString());
-            }
-
-            @Override
-            public void onFailure(Call<RecipeListResponse> call, Throwable t) {
-                Log.d("RECIPES FAILRUE", "Error");
-            }
-        });
-
     }
 
 }
