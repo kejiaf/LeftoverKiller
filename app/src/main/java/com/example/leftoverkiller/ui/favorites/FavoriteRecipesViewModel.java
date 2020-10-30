@@ -1,14 +1,14 @@
-package com.example.leftoverkiller.ui.notifications;
+package com.example.leftoverkiller.ui.favorites;
 
 import android.arch.lifecycle.LiveData;
 import android.arch.lifecycle.MutableLiveData;
 import android.arch.lifecycle.ViewModel;
 
-public class NotificationsViewModel extends ViewModel {
+public class FavoriteRecipesViewModel extends ViewModel {
 
     private MutableLiveData<String> mText;
 
-    public NotificationsViewModel() {
+    public FavoriteRecipesViewModel() {
         mText = new MutableLiveData<>();
         mText.setValue("This is notifications fragment");
     }

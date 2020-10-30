@@ -19,7 +19,7 @@
 
     <fragment
         android:id="@+id/navigation_fav_recipes"
-        android:name="com.example.leftoverkiller.ui.notifications.NotificationsFragment"
+        android:name="com.example.leftoverkiller.ui.favorites.FavoriteRecipesFragment"
         android:label="@string/title_favRecipes"
         tools:layout="@layout/fragment_fav_recipes" />
 </navigation>
