@@ -10,6 +10,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.example.leftoverkiller.R;
+import com.example.leftoverkiller.model.Recipe;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -17,8 +18,8 @@ import java.util.List;
 
 public class RecipesAdapter extends
         RecyclerView.Adapter<com.example.leftoverkiller.application.RecipesAdapter.MyViewHolder> implements Filterable {
-    private List<String> recipesList;
-    private List<String> recipesListAll;
+    private List<Recipe> recipesList;
+    private List<Recipe> recipesListAll;
 
     public static class MyViewHolder extends RecyclerView.ViewHolder
     {
@@ -29,7 +30,7 @@ public class RecipesAdapter extends
         }
     }
 
-    public RecipesAdapter(List<String> recipesList) {
+    public RecipesAdapter(List<Recipe> recipesList) {
         this.recipesList = recipesList;
         this.recipesListAll= new ArrayList<>(recipesList);
     }
@@ -46,7 +47,7 @@ public class RecipesAdapter extends
     @Override
     public void onBindViewHolder(@NonNull RecipesAdapter.MyViewHolder myViewHolder, int i) {
         TextView recipeName = myViewHolder.linearLayout.findViewById(R.id.recipe_name);
-        recipeName.setText( recipesList.get(i));
+        recipeName.setText(recipesList.get(i).getName());
     }
 
     @Override
@@ -62,12 +63,12 @@ public class RecipesAdapter extends
         @Override
         protected FilterResults performFiltering(CharSequence charSequence) {
 
-            List<String> filterList = new ArrayList<>();
+            List<Recipe> filterList = new ArrayList<>();
             if(charSequence.toString().isEmpty()){
                 filterList.addAll(recipesListAll);
             }else{
-                for(String recipe: recipesListAll){
-                    if(recipe.toLowerCase().contains(charSequence.toString().toLowerCase())){
+                for(Recipe recipe: recipesListAll){
+                    if(recipe.getName().toLowerCase().contains(charSequence.toString().toLowerCase())){
                         filterList.add(recipe);
                     }
                 }
@@ -81,7 +82,7 @@ public class RecipesAdapter extends
         @Override
         protected void publishResults(CharSequence charSequence, FilterResults filterResults) {
             recipesList.clear();
-            recipesList.addAll((Collection<? extends String>) filterResults.values);
+            recipesList.addAll((Collection<? extends Recipe>)filterResults.values);
             notifyDataSetChanged();
         }
     };
