@@ -3,11 +3,23 @@ package com.example.leftoverkiller;
 import android.os.Bundle;
 import android.support.design.widget.BottomNavigationView;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 import androidx.navigation.ui.AppBarConfiguration;
 import androidx.navigation.ui.NavigationUI;
+
+import com.example.leftoverkiller.application.LeftoverKillerApplication;
+import com.example.leftoverkiller.model.IngredientListRequest;
+import com.example.leftoverkiller.model.RecipeListResponse;
+
+import java.util.ArrayList;
+import java.util.List;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -24,6 +36,32 @@ public class MainActivity extends AppCompatActivity {
         NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment);
         NavigationUI.setupActionBarWithNavController(this, navController, appBarConfiguration);
         NavigationUI.setupWithNavController(navView, navController);
+
+        List<String> ingredientList = new ArrayList<>();
+        ingredientList.add("salt");
+        ingredientList.add("paprika");
+        ingredientList.add("cardamom");
+        ingredientList.add("coriander");
+        ingredientList.add("ground black pepper");
+        ingredientList.add("grapeseed oil");
+        ingredientList.add("maple syrup");
+        ingredientList.add("salmon fillet");
+
+        IngredientListRequest request = new IngredientListRequest(ingredientList);
+        Call<RecipeListResponse> call = ((LeftoverKillerApplication) getApplication()).apiService.getMatchingRecipes(request);
+
+        call.enqueue(new Callback<RecipeListResponse>() {
+            @Override
+            public void onResponse(Call<RecipeListResponse> call, Response<RecipeListResponse> response) {
+                Log.d("RECIPES", response.body().toString());
+            }
+
+            @Override
+            public void onFailure(Call<RecipeListResponse> call, Throwable t) {
+                Log.d("RECIPES FAILRUE", "Error");
+            }
+        });
+
     }
 
 }

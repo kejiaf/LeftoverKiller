@@ -15,7 +15,7 @@ public class Recipe {
     @SerializedName("ingredients")
     List<Ingredient> ingredients;
 
-    @SerializedName("imageURL")
+    @SerializedName("img_url")
     String imageURL;
 
     @SerializedName("instructions")
