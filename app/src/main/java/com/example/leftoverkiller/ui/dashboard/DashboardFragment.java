@@ -134,7 +134,6 @@ public class DashboardFragment extends Fragment {
         addIngredient.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                // TODO: implement with endpoints
                 String enteredIngredient = autoTextView.getText().toString();
                 addToRecyclerView(enteredIngredient);
             }
@@ -144,20 +143,20 @@ public class DashboardFragment extends Fragment {
 
     private void buildRecyclerView() {
         // If dataset is not null, add adapter
-        if (selectedIngredientDataset != null) {
-            Log.i("ingredientlist", "ingredient data not null with size " + selectedIngredientDataset.size());
+        TextView tvEmptyWarning = getView().findViewById(R.id.tv_empty_view_warning);
+
+        if(selectedIngredientDataset != null && selectedIngredientDataset.size() == 0) {
             // Adapter for recycler view
-            mAdapter = new IngredientsAdapter(selectedIngredientDataset, selectedIngredientSet);
+            mAdapter = new IngredientsAdapter(selectedIngredientDataset, selectedIngredientSet,
+                    tvEmptyWarning, recyclerView);
             recyclerView.setAdapter(mAdapter);
         }
 
         // Hide recycler view if empty and replace with an empty dataset message
-        if (selectedIngredientDataset == null || selectedIngredientDataset.size() == 0) {
-            TextView tvEmptyWarning = getView().findViewById(R.id.tv_empty_view_warning);
+        if(selectedIngredientDataset == null || selectedIngredientDataset.size() == 0) {
             recyclerView.setVisibility(View.GONE);
             tvEmptyWarning.setVisibility(View.VISIBLE);
         } else {
-            TextView tvEmptyWarning = getView().findViewById(R.id.tv_empty_view_warning);
             recyclerView.setVisibility(View.VISIBLE);
             tvEmptyWarning.setVisibility(View.GONE);
         }
@@ -199,8 +198,22 @@ public class DashboardFragment extends Fragment {
 
         if (selectedIngredientSet.contains(ingredient))
             return;
-        selectedIngredientDataset.add(ingredient);
-        selectedIngredientSet.add(ingredient);
-        mAdapter.notifyDataSetChanged();
+        else if( selectedIngredientDataset.isEmpty() )
+        {
+            selectedIngredientDataset.add(ingredient);
+            selectedIngredientSet.add(ingredient);
+            mAdapter.notifyDataSetChanged();
+
+            // Set recycler view to be visible when first element added
+            TextView tvEmptyWarning = getView().findViewById(R.id.tv_empty_view_warning);
+            recyclerView.setVisibility(View.VISIBLE);
+            tvEmptyWarning.setVisibility(View.GONE);
+        }
+        else
+        {
+            selectedIngredientDataset.add(ingredient);
+            selectedIngredientSet.add(ingredient);
+            mAdapter.notifyDataSetChanged();
+        }
     }
 }

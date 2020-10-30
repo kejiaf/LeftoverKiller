@@ -2,7 +2,9 @@ package com.example.leftoverkiller.application;
 
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
+import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
@@ -18,6 +20,8 @@ public class IngredientsAdapter extends
 {
     private List<String> ingredientsDataset; //TODO: change to Ingredient later
     Set<String> ingredientSet;
+    TextView emptyWarn;
+    RecyclerView recyclerView;
     public boolean areItemsClickable = false;
 
     // Provide a reference to the views for each data item
@@ -35,9 +39,12 @@ public class IngredientsAdapter extends
     }
 
     // Provide a suitable constructor (depends on the kind of dataset)
-    public IngredientsAdapter(ArrayList<String> ingredientsDataset, Set<String> selectedIngredientSet) {
+    public IngredientsAdapter(ArrayList<String> ingredientsDataset, Set<String> selectedIngredientSet,
+                              TextView emptyWarn, RecyclerView recyclerView ) {
         this.ingredientsDataset = ingredientsDataset;
         this.ingredientSet = selectedIngredientSet;
+        this.emptyWarn = emptyWarn;
+        this.recyclerView = recyclerView;
     }
 
     // Create new views (invoked by the layout manager)
@@ -60,6 +67,24 @@ public class IngredientsAdapter extends
         //TODO: set textview or something similar to start off with
         TextView ingredientName = holder.linearLayout.findViewById(R.id.ingredient_name);
         ingredientName.setText( ingredientsDataset.get(position) );
+
+        ImageView ingredientImage = holder.linearLayout.findViewById(R.id.avatar);
+        ingredientImage.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view)
+            {
+                String ingredientToBeRemoved = ingredientsDataset.get(holder.getAdapterPosition());
+                ingredientsDataset.remove(holder.getAdapterPosition());
+                ingredientSet.remove(ingredientToBeRemoved);
+                notifyDataSetChanged();
+
+                if( ingredientsDataset.isEmpty() )
+                {
+                    recyclerView.setVisibility(View.GONE);
+                    emptyWarn.setVisibility(View.VISIBLE);
+                }
+            }
+        });
     }
 
     // Return the size of your dataset (invoked by the layout manager)
