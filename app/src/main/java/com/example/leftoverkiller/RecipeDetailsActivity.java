@@ -8,6 +8,8 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.View;
+import android.widget.ImageView;
+import android.widget.TextView;
 
 import com.example.leftoverkiller.application.LeftoverKillerApplication;
 import com.example.leftoverkiller.model.Ingredient;
@@ -22,6 +24,9 @@ import retrofit2.Call;
 
 public class RecipeDetailsActivity extends AppCompatActivity {
 
+    ImageView recipeImage;
+    TextView instructions;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -31,5 +36,10 @@ public class RecipeDetailsActivity extends AppCompatActivity {
         CollapsingToolbarLayout toolBarLayout = (CollapsingToolbarLayout) findViewById(R.id.toolbar_layout);
         toolBarLayout.setTitle(getTitle());
 
+    }
+
+    private void initViews(){
+        recipeImage = findViewById(R.id.image_recipe);
+        instructions = findViewById(R.id.recipe_instructions);
     }
 }
