@@ -4,7 +4,7 @@ import com.google.gson.annotations.SerializedName;
 
 import java.util.List;
 
-public class IngredientListReponse {
+public class IngredientListResponse {
 
     @SerializedName("success")
     Boolean success;
@@ -12,7 +12,7 @@ public class IngredientListReponse {
     @SerializedName("ingredients")
     List<Ingredient> ingredients;
 
-    public IngredientListReponse(Boolean success, List<Ingredient> ingredients) {
+    public IngredientListResponse(Boolean success, List<Ingredient> ingredients) {
         this.success = success;
         this.ingredients = ingredients;
     }

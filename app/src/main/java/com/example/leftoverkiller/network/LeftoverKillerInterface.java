@@ -1,8 +1,6 @@
 package com.example.leftoverkiller.network;
 
-import com.example.leftoverkiller.model.Ingredient;
-import com.example.leftoverkiller.model.IngredientListReponse;
-import com.example.leftoverkiller.model.Recipe;
+import com.example.leftoverkiller.model.IngredientListResponse;
 import com.example.leftoverkiller.model.RecipeListResponse;
 
 import retrofit2.Call;
@@ -17,6 +15,6 @@ public interface LeftoverKillerInterface {
 
     @FormUrlEncoded
     @POST("get_ingredients.php")
-    Call<IngredientListReponse> getIngredients();
+    Call<IngredientListResponse> getIngredients();
 
 }
