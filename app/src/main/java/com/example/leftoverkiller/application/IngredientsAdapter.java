@@ -47,6 +47,10 @@ public class IngredientsAdapter extends
         this.recyclerView = recyclerView;
     }
 
+    public List<String> getIngredients(){
+        return ingredientsDataset;
+    }
+
     // Create new views (invoked by the layout manager)
     @Override
     public com.example.leftoverkiller.application.IngredientsAdapter.MyViewHolder

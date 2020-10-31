@@ -40,6 +40,10 @@ public class MatchingRecipeAdapter extends
         this.mathcingRecipeDataset = mathcingRecipeDataset;
     }
 
+    public List<Recipe> getMatchingRecipes(){
+        return  mathcingRecipeDataset;
+    }
+
     // Create new views (invoked by the layout manager)
     @Override
     public com.example.leftoverkiller.application.MatchingRecipeAdapter.MyViewHolder
