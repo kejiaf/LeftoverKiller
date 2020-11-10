@@ -1,11 +1,15 @@
 package com.example.leftoverkiller;
 
+import android.content.Intent;
+import android.support.v4.view.GestureDetectorCompat;
 import android.support.v7.app.AppCompatActivity;
 
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
+import android.view.GestureDetector;
+import android.view.MotionEvent;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.TextView;
@@ -20,6 +24,7 @@ import com.example.leftoverkiller.model.IngredientListRequest;
 import com.example.leftoverkiller.model.IngredientListResponse;
 import com.example.leftoverkiller.model.Recipe;
 import com.example.leftoverkiller.model.RecipeListResponse;
+import com.example.leftoverkiller.ui.home.SearchRecipesFragment;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -77,6 +82,48 @@ public class MatchingRecipesActivity extends AppCompatActivity {
         }
     }
 
+    public abstract class MyItemClickListener extends RecyclerView.SimpleOnItemTouchListener {
+
+        private GestureDetectorCompat mGestureDetectorCompat;
+        private RecyclerView mRecyclerView;
+
+        public MyItemClickListener(RecyclerView recyclerView) {
+            this.mRecyclerView = recyclerView;
+            mGestureDetectorCompat =
+                    new GestureDetectorCompat(mRecyclerView.getContext(),new MatchingRecipesActivity.MyItemClickListener.MyGestureListener());
+        }
+
+        @Override
+        public void onTouchEvent(RecyclerView rv, MotionEvent e) {
+            mGestureDetectorCompat.onTouchEvent(e);
+        }
+
+        @Override
+        public boolean onInterceptTouchEvent(RecyclerView rv, MotionEvent e) {
+            mGestureDetectorCompat.onTouchEvent(e);
+            return false;
+        }
+
+        @Override
+        public void onRequestDisallowInterceptTouchEvent(boolean disallowIntercept) {
+        }
+
+        public abstract void onItemClick(RecyclerView.ViewHolder vh);
+
+        private class MyGestureListener extends GestureDetector.SimpleOnGestureListener{
+            @Override
+            public boolean onSingleTapUp(MotionEvent e) {
+                View childView = mRecyclerView.findChildViewUnder(e.getX(), e.getY());
+                if (childView != null) {
+                    RecyclerView.ViewHolder viewHolder =
+                            mRecyclerView.getChildViewHolder(childView);
+                    onItemClick(viewHolder);
+                }
+                return true;
+            }
+        }
+    }
+
     private void callAPI() {
         IngredientListRequest request = new IngredientListRequest(ingredientList);
         Call<RecipeListResponse> call = ((LeftoverKillerApplication) getApplication()).apiService.getMatchingRecipes(request);
@@ -91,6 +138,19 @@ public class MatchingRecipesActivity extends AppCompatActivity {
                     // Adapter for recycler view
                     mAdapter = new MatchingRecipeAdapter(response.body().getRecipes());
                     recyclerView.setAdapter(mAdapter);
+
+                    //click on recipe to see details
+                    recyclerView.addOnItemTouchListener(new MatchingRecipesActivity.MyItemClickListener(recyclerView){
+                        @Override
+                        public void onItemClick(RecyclerView.ViewHolder viewHolder) {
+                            int position = viewHolder.getAdapterPosition();
+                            int recipeID = mAdapter.RecipeID(position);
+                            Intent intent = new Intent(getApplicationContext(), RecipeDetailsActivity.class);
+                            intent.putExtra("recipeID", recipeID);
+                            startActivity(intent);
+                        }
+                    });
+
                     // If dataset is not null, add adapter
                     buildRecyclerView(recipeDataset);
                     label.setText("Matching Recipes Found: " + recipeDataset.size());

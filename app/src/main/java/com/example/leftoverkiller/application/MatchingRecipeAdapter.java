@@ -67,6 +67,10 @@ public class MatchingRecipeAdapter extends
 
     }
 
+    public int RecipeID(int position){
+        return mathcingRecipeDataset.get(position).getRecipeId();
+    }
+
     // Return the size of your dataset (invoked by the layout manager)
     @Override
     public int getItemCount() {

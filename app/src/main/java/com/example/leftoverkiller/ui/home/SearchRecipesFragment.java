@@ -95,7 +95,7 @@ public class SearchRecipesFragment extends Fragment {
         public MyItemClickListener(RecyclerView recyclerView) {
             this.mRecyclerView = recyclerView;
             mGestureDetectorCompat =
-                    new GestureDetectorCompat(mRecyclerView.getContext(),new MyGestureListener());
+                    new GestureDetectorCompat(mRecyclerView.getContext(),new SearchRecipesFragment.MyItemClickListener.MyGestureListener());
         }
 
         @Override
@@ -128,7 +128,6 @@ public class SearchRecipesFragment extends Fragment {
             }
         }
     }
-
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
 
