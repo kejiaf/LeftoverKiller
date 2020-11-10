@@ -5,4 +5,44 @@
     <string name="title_favRecipes">Favorite Recipes</string>
     <string name="warn_no_ingredient_selected">No ingredient has been selected</string>
     <string name="warn_no_recipes_ingredients_found">No recipes with specified ingredients found</string>
+    <string name="example">List getMatchingRecipe(List ingredients)
+This API method is called in the MatchingRecipesFragment when the user wants to get a list of recipes based on his ingredient selection.
+
+List getRecipes()
+This API method is called in the SearchRecipesFragment when the user wants to search based on the recipe name. This API returns all the available recipes.
+List getIngredients()
+This API method is called in the SearchIngredientFragment when the user wants to search based on the ingredient list. This API returns all the available ingredients.
+
+Ingredient getIngredientDetails(int ingredient_id)
+This API method is called in the IngredientDetailsActivity which shows the ingredient details including the top recipes for that ingredient.
+
+Recipe getRecipeDetails(int recipeId)
+This API method is called in the RecipeDetailsActivity, which shows the details about how that recipe is implemented. It returns the details for the recipeID passed.
+        List getMatchingRecipe(List ingredients)
+This API method is called in the MatchingRecipesFragment when the user wants to get a list of recipes based on his ingredient selection.
+
+List getRecipes()
+This API method is called in the SearchRecipesFragment when the user wants to search based on the recipe name. This API returns all the available recipes.
+List getIngredients()
+This API method is called in the SearchIngredientFragment when the user wants to search based on the ingredient list. This API returns all the available ingredients.
+
+Ingredient getIngredientDetails(int ingredient_id)
+This API method is called in the IngredientDetailsActivity which shows the ingredient details including the top recipes for that ingredient.
+
+Recipe getRecipeDetails(int recipeId)
+This API method is called in the RecipeDetailsActivity, which shows the details about how that recipe is implemented. It returns the details for the recipeID passed.
+        List getMatchingRecipe(List ingredients)
+This API method is called in the MatchingRecipesFragment when the user wants to get a list of recipes based on his ingredient selection.
+
+List getRecipes()
+This API method is called in the SearchRecipesFragment when the user wants to search based on the recipe name. This API returns all the available recipes.
+List getIngredients()
+This API method is called in the SearchIngredientFragment when the user wants to search based on the ingredient list. This API returns all the available ingredients.
+
+Ingredient getIngredientDetails(int ingredient_id)
+This API method is called in the IngredientDetailsActivity which shows the ingredient details including the top recipes for that ingredient.
+
+Recipe getRecipeDetails(int recipeId)
+This API method is called in the RecipeDetailsActivity, which shows the details about how that recipe is implemented. It returns the details for the recipeID passed.
+</string>
 </resources>

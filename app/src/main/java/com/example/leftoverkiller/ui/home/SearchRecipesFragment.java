@@ -1,14 +1,19 @@
 package com.example.leftoverkiller.ui.home;
 
 import android.app.Application;
+import android.content.Intent;
 import android.os.Bundle;
+import android.os.Parcelable;
+import android.support.v4.view.GestureDetectorCompat;
 import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.view.GestureDetector;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.SearchView;
@@ -20,7 +25,9 @@ import android.arch.lifecycle.Observer;
 import android.arch.lifecycle.ViewModelProviders;
 import android.widget.Toast;
 
+import com.example.leftoverkiller.MainActivity;
 import com.example.leftoverkiller.R;
+import com.example.leftoverkiller.RecipeDetailsActivity;
 import com.example.leftoverkiller.application.LeftoverKillerApplication;
 import com.example.leftoverkiller.application.RecipesAdapter;
 import com.example.leftoverkiller.model.Recipe;
@@ -64,12 +71,62 @@ public class SearchRecipesFragment extends Fragment {
 
         layoutManager = new LinearLayoutManager(this.getContext());
         recyclerView.setLayoutManager(layoutManager);
-
-        //mAdapter = new RecipesAdapter(recipesList);
         recyclerView.setAdapter(mAdapter);
 
-        //DividerItemDecoration dividerItemDecoration = new DividerItemDecoration(this.getContext(), DividerItemDecoration.VERTICAL);
-        //recyclerView.addItemDecoration(dividerItemDecoration);
+        recyclerView.addOnItemTouchListener(new MyItemClickListener(recyclerView){
+            @Override
+            public void onItemClick(RecyclerView.ViewHolder viewHolder) {
+                int position = viewHolder.getAdapterPosition();
+                int recipeID = mAdapter.RecipeID(position);
+                Intent intent = new Intent(getActivity(), RecipeDetailsActivity.class);
+                intent.putExtra("recipeID", recipeID);
+                startActivity(intent);
+            }
+        });
+        DividerItemDecoration dividerItemDecoration = new DividerItemDecoration(this.getContext(), DividerItemDecoration.VERTICAL);
+        recyclerView.addItemDecoration(dividerItemDecoration);
+    }
+
+    public abstract class MyItemClickListener extends RecyclerView.SimpleOnItemTouchListener {
+
+        private GestureDetectorCompat mGestureDetectorCompat;
+        private RecyclerView mRecyclerView;
+
+        public MyItemClickListener(RecyclerView recyclerView) {
+            this.mRecyclerView = recyclerView;
+            mGestureDetectorCompat =
+                    new GestureDetectorCompat(mRecyclerView.getContext(),new MyGestureListener());
+        }
+
+        @Override
+        public void onTouchEvent(RecyclerView rv, MotionEvent e) {
+            mGestureDetectorCompat.onTouchEvent(e);
+        }
+
+        @Override
+        public boolean onInterceptTouchEvent(RecyclerView rv, MotionEvent e) {
+            mGestureDetectorCompat.onTouchEvent(e);
+            return false;
+        }
+
+        @Override
+        public void onRequestDisallowInterceptTouchEvent(boolean disallowIntercept) {
+        }
+
+        public abstract void onItemClick(RecyclerView.ViewHolder vh);
+
+        private class MyGestureListener extends GestureDetector.SimpleOnGestureListener{
+            @Override
+            public boolean onSingleTapUp(MotionEvent e) {
+                View childView = mRecyclerView.findChildViewUnder(e.getX(), e.getY());
+                if (childView != null) {
+                    RecyclerView.ViewHolder viewHolder =
+                            mRecyclerView.getChildViewHolder(childView);
+                    onItemClick(viewHolder);
+                }
+                return true;
+            }
+        }
     }
 
     @Override
