@@ -8,6 +8,7 @@ import com.example.leftoverkiller.model.RecipeListResponse;
 
 import retrofit2.Call;
 import retrofit2.http.Body;
+import retrofit2.http.Field;
 import retrofit2.http.FormUrlEncoded;
 import retrofit2.http.POST;
 
@@ -22,10 +23,12 @@ public interface LeftoverKillerInterface {
     @POST("get_matching_recipes.php")
     Call<RecipeListResponse> getMatchingRecipes(@Body IngredientListRequest ingredientList);
 
+    @FormUrlEncoded
     @POST("get_recipe_details.php")
-    Call<Recipe> getRecipeDetails(@Body IngredientListRequest ingredientList);
+    Call<Recipe> getRecipeDetails(@Field("recipe_id") int recipeId);
 
+    @FormUrlEncoded
     @POST("get_ingredient_details.php")
-    Call<Ingredient> getIngredientDetails(@Body IngredientListRequest ingredientList);
+    Call<Ingredient> getIngredientDetails(@Field("ingredient_id") int ingredientId);
 
 }
