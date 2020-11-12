@@ -62,7 +62,7 @@ public class RecipeDetailsActivity extends AppCompatActivity {
             @Override
             public void onResponse(Call<Recipe> call, Response<Recipe> response) {
                 if (response.body() != null) {
-                    recipeName.setText(response.body().getName());
+                    recipeName.setText(response.body().getName() + recipeID);
                     recipeInstruction.setText(response.body().getInstructions());
                     Picasso.get().load(response.body().getImageUrl()).fit().centerCrop().into(recipeImage);
                 } else {
