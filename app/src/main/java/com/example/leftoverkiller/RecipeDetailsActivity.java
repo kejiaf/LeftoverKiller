@@ -33,6 +33,7 @@ public class RecipeDetailsActivity extends AppCompatActivity {
     ImageView recipeImage;
     TextView recipeName;
     TextView recipeInstruction;
+    int recipeID;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -50,29 +51,28 @@ public class RecipeDetailsActivity extends AppCompatActivity {
         recipeName = findViewById(R.id.recipe_name);
         recipeInstruction = findViewById(R.id.recipe_instruction);
 
-        int recipe = getIntent().getIntExtra("recipeID", -1);
-        recipeName.setText("Sample Recipe" + recipe);
+        recipeID = getIntent().getIntExtra("recipeID", -1);
+        //recipeName.setText("Sample Recipe" + recipeID);
     }
-
-   /* @Override
+    @Override
     public void onStart() {
         super.onStart();
-        Call<RecipeListResponse> call = ((LeftoverKillerApplication) this.getApplication()).apiService.;
-        call.enqueue(new Callback<RecipeListResponse>() {
+        Call<Recipe> call = ((LeftoverKillerApplication) this.getApplication()).apiService.getRecipeDetails(recipeID);
+        call.enqueue(new Callback<Recipe>() {
             @Override
-            public void onResponse(Call<RecipeListResponse> call, Response<RecipeListResponse> response) {
-                if (response.body().getRecipes() != null) {
-                    recipeName.setText(response.body().getRecipes().getName());
-                    recipeInstruction.setText(response.body().getRecipes().getInstructions());
-                    Picasso.get().load(response.body().getRecipes().getImageUrl()).fit().centerCrop().into(recipeImage);
+            public void onResponse(Call<Recipe> call, Response<Recipe> response) {
+                if (response.body() != null) {
+                    recipeName.setText(response.body().getName());
+                    recipeInstruction.setText(response.body().getInstructions());
+                    Picasso.get().load(response.body().getImageUrl()).fit().centerCrop().into(recipeImage);
                 } else {
-
+                    Toast.makeText(getApplicationContext(), "Please check your network connection!", Toast.LENGTH_SHORT).show();
                 }
             }
             @Override
-            public void onFailure(Call<RecipeListResponse> call, Throwable t) {
-                Toast.makeText(getContext(), "Please check your network connection!", Toast.LENGTH_SHORT).show();
+            public void onFailure(Call<Recipe> call, Throwable t) {
+                Toast.makeText(getApplicationContext(), "Please check your network connection!", Toast.LENGTH_SHORT).show();
             }
         });
-    }*/
+    }
 }
