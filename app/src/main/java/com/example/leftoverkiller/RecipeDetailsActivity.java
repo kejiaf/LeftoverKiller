@@ -50,8 +50,8 @@ public class RecipeDetailsActivity extends AppCompatActivity {
         recipeName = findViewById(R.id.recipe_name);
         recipeInstruction = findViewById(R.id.recipe_instruction);
 
-        //int recipe = getIntent().getParcelableExtra("recipeID");
-        //recipeName.setText("Sample Recipe" + recipe);
+        int recipe = getIntent().getIntExtra("recipeID", -1);
+        recipeName.setText("Sample Recipe" + recipe);
     }
 
    /* @Override
