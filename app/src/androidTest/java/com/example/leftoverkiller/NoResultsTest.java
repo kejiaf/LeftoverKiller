@@ -55,15 +55,15 @@ public class NoResultsTest {
             e.printStackTrace();
         }
 
-        ViewInteraction textView = onView(
-                allOf(withId(R.id.matching_recipes_label), withText("Matching Recipes Found: 0"),
-                        childAtPosition(
-                                childAtPosition(
-                                        IsInstanceOf.<View>instanceOf(android.widget.ScrollView.class),
-                                        0),
-                                0),
-                        isDisplayed()));
-        textView.check(matches(withText("Matching Recipes Found: 0")));
+//        ViewInteraction textView = onView(
+//                allOf(withId(R.id.matching_recipes_label), withText("Matching Recipes Found: 0"),
+//                        childAtPosition(
+//                                childAtPosition(
+//                                        IsInstanceOf.<View>instanceOf(android.widget.ScrollView.class),
+//                                        0),
+//                                0),
+//                        isDisplayed()));
+        onView(withId(R.id.matching_recipes_label)).check(matches(withText("Matching Recipes Found: 0")));
     }
 
     private static Matcher<View> childAtPosition(

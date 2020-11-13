@@ -81,15 +81,7 @@ public class RemoveIngredientTest {
                         isDisplayed()));
         appCompatImageView.perform(click());
 
-        ViewInteraction textView = onView(
-                allOf(withId(R.id.tv_empty_view_warning), withText("No ingredient has been selected"),
-                        childAtPosition(
-                                childAtPosition(
-                                        IsInstanceOf.<View>instanceOf(android.widget.ScrollView.class),
-                                        0),
-                                2),
-                        isDisplayed()));
-        textView.check(matches(withText("No ingredient has been selected")));
+        onView(withId(R.id.tv_empty_view_warning)).check(matches(withText("No ingredient has been selected")));
     }
 
     private static Matcher<View> childAtPosition(

@@ -42,6 +42,8 @@ public class Utils {
 
     public static boolean isRecipeInFavorites(int recipeID, Context context) {
         List<Recipe> recipes = fetchFavorites(context);
+        if (recipes == null || recipes.size() == 0)
+            return false;
         for (Recipe recipeItem : recipes)
             if (recipeItem.getRecipeId() == recipeID)
                 return true;
