@@ -8,6 +8,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.View;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -33,6 +34,7 @@ public class RecipeDetailsActivity extends AppCompatActivity {
     ImageView recipeImage;
     TextView recipeName;
     TextView recipeInstruction;
+    FloatingActionButton addToFavList;
     int recipeID;
 
     @Override
@@ -50,9 +52,27 @@ public class RecipeDetailsActivity extends AppCompatActivity {
         recipeImage = findViewById(R.id.image_recipe);
         recipeName = findViewById(R.id.recipe_name);
         recipeInstruction = findViewById(R.id.recipe_instruction);
+        addToFavList = findViewById(R.id.fab_add_tofav);
 
         recipeID = getIntent().getIntExtra("recipeID", -1);
-        //recipeName.setText("Sample Recipe" + recipeID);
+
+        /*
+         *change button image
+         */
+        //if in fav list
+        addToFavList.setBackgroundResource(R.drawable.ic_baseline_remove_24);
+        //if not
+        addToFavList.setBackgroundResource(R.drawable.ic_baseline_add_24);
+
+        /*
+         * add/remove favorite list
+         */
+        addToFavList.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+            }
+        });
     }
     @Override
     public void onStart() {
@@ -63,7 +83,10 @@ public class RecipeDetailsActivity extends AppCompatActivity {
             public void onResponse(Call<Recipe> call, Response<Recipe> response) {
                 if (response.body() != null) {
                     recipeName.setText(response.body().getName());
-                    recipeInstruction.setText(response.body().getInstructions());
+
+                    String instructions = response.body().getInstructions();
+                    recipeInstruction.setText(instructions);
+
                     Picasso.get().load(response.body().getImageUrl()).fit().centerCrop().into(recipeImage);
                 } else {
                     Toast.makeText(getApplicationContext(), "Please check your network connection!", Toast.LENGTH_SHORT).show();
