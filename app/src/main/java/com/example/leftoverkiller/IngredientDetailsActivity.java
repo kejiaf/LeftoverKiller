@@ -78,6 +78,7 @@ public class IngredientDetailsActivity extends AppCompatActivity {
             Log.i("debug_me", "brv inside" );
             recyclerView.setVisibility(View.VISIBLE);
             tvEmptyWarning.setVisibility(View.GONE);
+            mAdapter.notifyDataSetChanged(); // needed so the recycler view actually shows new data
         }
     }
 
