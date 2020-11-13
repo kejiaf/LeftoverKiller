@@ -15,6 +15,7 @@ import android.widget.Toast;
 
 import com.example.leftoverkiller.application.LeftoverKillerApplication;
 import com.example.leftoverkiller.application.RecipesAdapter;
+import com.example.leftoverkiller.application.Utils;
 import com.example.leftoverkiller.model.Ingredient;
 import com.example.leftoverkiller.model.IngredientListRequest;
 import com.example.leftoverkiller.model.IngredientListResponse;
@@ -48,7 +49,7 @@ public class RecipeDetailsActivity extends AppCompatActivity {
         initViews();
     }
 
-    private void initViews(){
+    private void initViews() {
         recipeImage = findViewById(R.id.image_recipe);
         recipeName = findViewById(R.id.recipe_name);
         recipeInstruction = findViewById(R.id.recipe_instruction);
@@ -60,50 +61,65 @@ public class RecipeDetailsActivity extends AppCompatActivity {
          *change button image
          */
         //if in fav list
-        addToFavList.setBackgroundResource(R.drawable.ic_baseline_remove_24);
-        //if not
-        addToFavList.setBackgroundResource(R.drawable.ic_baseline_add_24);
+        if (Utils.isRecipeInFavorites(recipeID, getApplicationContext()))
+            addToFavList.setBackgroundResource(R.drawable.ic_baseline_remove_24);
+        else
+            addToFavList.setBackgroundResource(R.drawable.ic_baseline_add_24);
 
         /*
          * add/remove favorite list
          */
-        addToFavList.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
 
-            }
-        });
     }
+
     @Override
     public void onStart() {
         super.onStart();
         Call<Recipe> call = ((LeftoverKillerApplication) this.getApplication()).apiService.getRecipeDetails(recipeID);
         call.enqueue(new Callback<Recipe>() {
             @Override
-            public void onResponse(Call<Recipe> call, Response<Recipe> response) {
+            public void onResponse(Call<Recipe> call, final Response<Recipe> response) {
                 if (response.body() != null) {
                     recipeName.setText(response.body().getName());
 
                     String instructions = response.body().getInstructions();
                     String[] steps = instructions.split("\\.");
                     StringBuilder text = new StringBuilder();
-                    for(String step: steps){
+                    for (String step : steps) {
                         step.trim();
                         text.append(step);
-                        text.append(System.getProperty ("line.separator"));
-                        text.append(System.getProperty ("line.separator"));
+                        text.append(System.getProperty("line.separator"));
+                        text.append(System.getProperty("line.separator"));
                     }
                     recipeInstruction.setText(text.toString());
-
+                    addToFavList.setVisibility(View.VISIBLE);
+                    addToFavList.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View view) {
+                            if (Utils.isRecipeInFavorites(recipeID, getApplicationContext())) {
+                                Utils.removeFromFavorites(recipeID, getApplicationContext());
+                                addToFavList.setBackgroundResource(R.drawable.ic_baseline_add_24);
+                            }
+                            else {
+                                Utils.addRecipe(response.body(), getApplicationContext());
+                                addToFavList.setBackgroundResource(R.drawable.ic_baseline_remove_24);
+                            }
+                        }
+                    });
                     Picasso.get().load(response.body().getImageUrl()).fit().centerCrop().into(recipeImage);
                 } else {
+                    addToFavList.setVisibility(View.GONE);
                     Toast.makeText(getApplicationContext(), "Please check your network connection!", Toast.LENGTH_SHORT).show();
                 }
             }
+
             @Override
             public void onFailure(Call<Recipe> call, Throwable t) {
+                addToFavList.setVisibility(View.GONE);
                 Toast.makeText(getApplicationContext(), "Please check your network connection!", Toast.LENGTH_SHORT).show();
             }
         });
     }
+
+
 }

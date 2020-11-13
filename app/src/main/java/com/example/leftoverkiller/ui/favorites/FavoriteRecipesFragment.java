@@ -46,6 +46,7 @@ public class FavoriteRecipesFragment extends Fragment {
     private RecipesAdapter mAdapter;
     private RecyclerView.LayoutManager layoutManager;
     private SearchView searchView;
+    TextView label;
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
@@ -59,13 +60,23 @@ public class FavoriteRecipesFragment extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         recyclerView = (RecyclerView) getView().findViewById(R.id.recipes_recycler_view);
-        List<Recipe> recipes = Utils.fetchFavorites(getContext());
+        label = view.findViewById(R.id.recipes_label);
         layoutManager = new LinearLayoutManager(this.getContext());
-        mAdapter = new RecipesAdapter(recipes == null ? new ArrayList<Recipe>() : recipes);
-        recyclerView.setAdapter(mAdapter);
         recyclerView.setLayoutManager(layoutManager);
-        recyclerView.setAdapter(mAdapter);
     }
 
-
+    @Override
+    public void onStart() {
+        super.onStart();
+        List<Recipe> recipes = Utils.fetchFavorites(getContext());
+        if (recipes == null || recipes.size() == 0) {
+            label.setVisibility(View.VISIBLE);
+            recyclerView.setVisibility(View.GONE);
+        } else {
+            mAdapter = new RecipesAdapter(recipes);
+            recyclerView.setAdapter(mAdapter);
+            label.setVisibility(View.GONE);
+            recyclerView.setVisibility(View.VISIBLE);
+        }
+    }
 }
