@@ -52,7 +52,7 @@ public class RecipeDetailsActivity extends AppCompatActivity {
         recipeImage = findViewById(R.id.image_recipe);
         recipeName = findViewById(R.id.recipe_name);
         recipeInstruction = findViewById(R.id.recipe_instruction);
-        addToFavList = findViewById(R.id.fab_add_tofav);
+        addToFavList = findViewById(R.id.fab_addfav);
 
         recipeID = getIntent().getIntExtra("recipeID", -1);
 
@@ -85,7 +85,15 @@ public class RecipeDetailsActivity extends AppCompatActivity {
                     recipeName.setText(response.body().getName());
 
                     String instructions = response.body().getInstructions();
-                    recipeInstruction.setText(instructions);
+                    String[] steps = instructions.split("\\.");
+                    StringBuilder text = new StringBuilder();
+                    for(String step: steps){
+                        step.trim();
+                        text.append(step);
+                        text.append(System.getProperty ("line.separator"));
+                        text.append(System.getProperty ("line.separator"));
+                    }
+                    recipeInstruction.setText(text.toString());
 
                     Picasso.get().load(response.body().getImageUrl()).fit().centerCrop().into(recipeImage);
                 } else {
