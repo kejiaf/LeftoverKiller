@@ -1,19 +1,24 @@
 package com.example.leftoverkiller.application;
 
+import android.content.Context;
+import android.content.Intent;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
+import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.example.leftoverkiller.R;
+import com.example.leftoverkiller.RecipeDetailsActivity;
 import com.example.leftoverkiller.model.Recipe;
+import com.squareup.picasso.Picasso;
 
 import java.util.List;
 
 public class RecipeWithIngredientAdapter extends
-        RecyclerView.Adapter<RecipeWithIngredientAdapter.MyViewHolder>
-{
+        RecyclerView.Adapter<RecipeWithIngredientAdapter.MyViewHolder> {
     private List<Recipe> recipesList;
 
     // Provide a reference to the views for each data item
@@ -30,7 +35,7 @@ public class RecipeWithIngredientAdapter extends
 
     // Provide a suitable constructor (depends on the kind of dataset)
     public RecipeWithIngredientAdapter(List<Recipe> recipesList) {
-        recipesList = recipesList;
+        this.recipesList = recipesList;
     }
 
     // Create new views (invoked by the layout manager)
@@ -49,8 +54,23 @@ public class RecipeWithIngredientAdapter extends
     public void onBindViewHolder(MyViewHolder holder, int position) {
         // - get element from your dataset at this position
         // - replace the contents of the view with that element
-        TextView recipeName = holder.linearLayout.findViewById(R.id.ingredient_detail_name);
-        recipeName.setText( recipesList.get(position).getName() );
+        TextView recipeName = holder.linearLayout.findViewById(R.id.recipe_name);
+        ImageView recipeImage = holder.linearLayout.findViewById(R.id.avatar);
+        recipeName.setText(recipesList.get(position).getName());
+        String imageURL = recipesList.get(position).getImageUrl();
+        if (imageURL != null && !imageURL.isEmpty())
+            Picasso.get().load(imageURL).fit().centerCrop().into(recipeImage);
+        final int recipeId = recipesList.get(position).getRecipeId();
+        final Context context = holder.linearLayout.getContext();
+
+        holder.linearLayout.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(context, RecipeDetailsActivity.class);
+                intent.putExtra("recipeID",recipeId );
+                context.startActivity(intent);
+            }
+        });
 
     }
 

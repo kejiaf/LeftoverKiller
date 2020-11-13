@@ -64,7 +64,7 @@ public class IngredientDetailsActivity extends AppCompatActivity {
         // If dataset is not null, add adapter
         TextView tvEmptyWarning = this.findViewById(R.id.tv_empty_recipes_warning);
 
-        if (listOfRecipes != null && listOfRecipes.size() == 0) {
+        if (listOfRecipes != null || listOfRecipes.size() != 0) {
             // Adapter for recycler view
             mAdapter = new RecipeWithIngredientAdapter(listOfRecipes);
             recyclerView.setAdapter(mAdapter);
