@@ -90,7 +90,7 @@ public class MatchingRecipesActivity extends AppCompatActivity {
         public MyItemClickListener(RecyclerView recyclerView) {
             this.mRecyclerView = recyclerView;
             mGestureDetectorCompat =
-                    new GestureDetectorCompat(mRecyclerView.getContext(),new MatchingRecipesActivity.MyItemClickListener.MyGestureListener());
+                    new GestureDetectorCompat(mRecyclerView.getContext(), new MatchingRecipesActivity.MyItemClickListener.MyGestureListener());
         }
 
         @Override
@@ -110,7 +110,7 @@ public class MatchingRecipesActivity extends AppCompatActivity {
 
         public abstract void onItemClick(RecyclerView.ViewHolder vh);
 
-        private class MyGestureListener extends GestureDetector.SimpleOnGestureListener{
+        private class MyGestureListener extends GestureDetector.SimpleOnGestureListener {
             @Override
             public boolean onSingleTapUp(MotionEvent e) {
                 View childView = mRecyclerView.findChildViewUnder(e.getX(), e.getY());
@@ -140,7 +140,7 @@ public class MatchingRecipesActivity extends AppCompatActivity {
                     recyclerView.setAdapter(mAdapter);
 
                     //click on recipe to see details
-                    recyclerView.addOnItemTouchListener(new MatchingRecipesActivity.MyItemClickListener(recyclerView){
+                    recyclerView.addOnItemTouchListener(new MatchingRecipesActivity.MyItemClickListener(recyclerView) {
                         @Override
                         public void onItemClick(RecyclerView.ViewHolder viewHolder) {
                             int position = viewHolder.getAdapterPosition();
@@ -153,14 +153,16 @@ public class MatchingRecipesActivity extends AppCompatActivity {
 
                     // If dataset is not null, add adapter
                     buildRecyclerView(recipeDataset);
-                    label.setText("Matching Recipes Found: " + recipeDataset.size());
+
 
                 }
+                label.setText("Matching Recipes Found: " + (recipeDataset != null ? recipeDataset.size() : "0"));
             }
 
             @Override
             public void onFailure(Call<RecipeListResponse> call, Throwable t) {
-                Toast.makeText(MatchingRecipesActivity.this, "Please check your network connection!", Toast.LENGTH_SHORT).show();
+                label.setText("Matching Recipes Found: " + (recipeDataset != null ? recipeDataset.size() : "0"));
+                Toast.makeText(MatchingRecipesActivity.this, "No matching Recipes found", Toast.LENGTH_SHORT).show();
             }
         });
     }

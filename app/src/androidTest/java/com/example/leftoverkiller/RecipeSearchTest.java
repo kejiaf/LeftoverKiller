@@ -21,19 +21,24 @@ import org.junit.runner.RunWith;
 import static androidx.test.espresso.Espresso.onData;
 import static androidx.test.espresso.action.ViewActions.click;
 import static androidx.test.espresso.action.ViewActions.closeSoftKeyboard;
+import static androidx.test.espresso.action.ViewActions.replaceText;
 import static androidx.test.espresso.action.ViewActions.scrollTo;
 import static androidx.test.espresso.assertion.ViewAssertions.matches;
 import static androidx.test.espresso.matcher.ViewMatchers.isClickable;
 import static androidx.test.espresso.matcher.ViewMatchers.isDisplayed;
+import static androidx.test.espresso.matcher.ViewMatchers.withClassName;
+import static androidx.test.espresso.matcher.ViewMatchers.withContentDescription;
+import static androidx.test.espresso.matcher.ViewMatchers.withParent;
 import static androidx.test.espresso.matcher.ViewMatchers.withText;
 import static androidx.test.espresso.matcher.ViewMatchers.withId;
 import static androidx.test.espresso.Espresso.onView;
 import static org.hamcrest.Matchers.allOf;
 import static org.hamcrest.Matchers.anything;
+import static org.hamcrest.core.Is.is;
 
 @RunWith(AndroidJUnit4.class)
 @LargeTest
-public class HelloWorldTest {
+public class RecipeSearchTest {
 
     @Rule
     public ActivityTestRule<MainActivity> mActivityRule =
@@ -75,14 +80,15 @@ public class HelloWorldTest {
         }
 
         ViewInteraction textView = onView(
-                allOf(withId(R.id.recipe_name), withText("rosemary steak"),
+                allOf(withId(R.id.recipe_name), withText("Rosemary Steak"),
                         childAtPosition(
                                 childAtPosition(
                                         withId(R.id.matching_recipes_recycler_view),
                                         0),
                                 1),
                         isDisplayed()));
-        textView.check(matches(withText("rosemary steak")));
+        textView.check(matches(withText("Rosemary Steak")));
+        onView(withText("Rosemary Steak")).perform(click());
     }
 
     private static Matcher<View> childAtPosition(
@@ -103,5 +109,67 @@ public class HelloWorldTest {
             }
         };
     }
+
+
+    @Test
+    public void searchForRecipe() {
+        ViewInteraction bottomNavigationItemView = onView(
+                allOf(withId(R.id.navigation_search_recipes), withContentDescription("SearchByRecipes"),
+                        childAtPosition(
+                                childAtPosition(
+                                        withId(R.id.nav_view),
+                                        0),
+                                0),
+                        isDisplayed()));
+        bottomNavigationItemView.perform(click());
+
+        ViewInteraction textView = onView(
+                allOf(withText("SearchByRecipes"),
+                        withParent(allOf(withId(R.id.action_bar),
+                                withParent(withId(R.id.action_bar_container)))),
+                        isDisplayed()));
+        textView.check(matches(withText("SearchByRecipes")));
+
+        ViewInteraction actionMenuItemView = onView(
+                allOf(withId(R.id.recipe_search), withContentDescription("recipe_search"),
+                        childAtPosition(
+                                childAtPosition(
+                                        withId(R.id.action_bar),
+                                        1),
+                                0),
+                        isDisplayed()));
+        actionMenuItemView.perform(click());
+
+        ViewInteraction appCompatImageView = onView(
+                allOf(withClassName(is("android.support.v7.widget.AppCompatImageView")), withContentDescription("Search"),
+                        childAtPosition(
+                                allOf(withClassName(is("android.widget.LinearLayout")),
+                                        childAtPosition(
+                                                withId(R.id.recipe_search),
+                                                0)),
+                                1),
+                        isDisplayed()));
+        appCompatImageView.perform(click());
+
+        ViewInteraction searchAutoComplete = onView(
+                allOf(withClassName(is("android.widget.SearchView$SearchAutoComplete")),
+                        childAtPosition(
+                                allOf(withClassName(is("android.widget.LinearLayout")),
+                                        childAtPosition(
+                                                withClassName(is("android.widget.LinearLayout")),
+                                                1)),
+                                0),
+                        isDisplayed()));
+        searchAutoComplete.perform(replaceText("rosem"), closeSoftKeyboard());
+
+        ViewInteraction textView2 = onView(
+                allOf(withId(R.id.recipe_name), withText("Rosemary Steak"),
+                        withParent(withParent(withId(R.id.recipes_recycler_view))),
+                        isDisplayed()));
+        textView2.check(matches(withText("Rosemary Steak")));
+        onView(withText("Rosemary Steak")).perform(click());
+
+    }
+
 
 }

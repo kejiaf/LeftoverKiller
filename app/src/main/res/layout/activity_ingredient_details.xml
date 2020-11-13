@@ -4,8 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
-    tools:context=".ui.dashboard.SearchIngredientsFragment">
+    tools:context=".IngredientDetailsActivity">
 
     <android.support.v4.widget.NestedScrollView
         android:layout_width="match_parent"
@@ -19,48 +18,30 @@
             android:layout_height="match_parent"
             android:orientation="vertical">
 
-            <RelativeLayout
-                android:id="@+id/ll_search_bar"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_margin="10dp"
-                android:gravity="center"
-                android:orientation="horizontal"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toTopOf="parent">
-
-                <android.widget.AutoCompleteTextView
-                    android:id="@+id/ingredients_search_auto_complete"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_toLeftOf="@+id/b_add_ingredient"/>
-
-                <Button
-                    android:id="@+id/b_add_ingredient"
-                    android:layout_width="wrap_content"
-                    android:layout_height="match_parent"
-                    android:layout_alignParentRight="true"
-                    android:text="+"/>
-
-            </RelativeLayout>
-
             <TextView
-                android:id="@+id/tv_label_ingredients_selected"
-                android:layout_width="match_parent"
+                android:id="@+id/ingredient_detail_name"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="8dp"
-                android:layout_marginLeft="8dp"
-                android:layout_marginTop="30dp"
-                android:layout_marginEnd="8dp"
-                android:layout_marginRight="8dp"
-                android:text="Ingredients Selected:"
-                android:textSize="18sp"
+                android:layout_marginTop="16dp"
+                android:text="Ingredient Name"
+                android:textSize="24sp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/ll_search_bar"></TextView>
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <ImageView
+                android:id="@+id/ingredient_image"
+                android:layout_width="150dp"
+                android:layout_height="150dp"
+                android:layout_gravity="center|top"
+                android:layout_marginTop="30dp"
+                android:src="@drawable/ic_launcher_background"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/ingredient_detail_name" />
 
             <TextView
-                android:id="@+id/tv_empty_view_warning"
+                android:id="@+id/tv_empty_recipes_warning"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="8dp"
@@ -80,18 +61,18 @@
                 android:visibility="gone"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/tv_label_ingredients_selected" />
+                app:layout_constraintTop_toBottomOf="@id/ingredient_image" />
 
             <android.support.v7.widget.RecyclerView
-                android:id="@+id/ingredients_recycler_view"
+                android:id="@+id/recipes_recycler_view"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="8dp"
                 android:layout_marginLeft="8dp"
                 android:layout_marginTop="25dp"
                 android:layout_marginEnd="8dp"
-                android:layout_marginRight="8dp"
                 android:layout_marginBottom="70dp"
+                android:layout_marginRight="8dp"
                 android:background="#CACACA"
                 android:orientation="vertical"
                 android:scrollbars="vertical"
@@ -99,24 +80,10 @@
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="0.0"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/tv_label_ingredients_selected" />
+                app:layout_constraintTop_toBottomOf="@+id/ingredient_image" />
 
         </android.support.constraint.ConstraintLayout>
 
     </android.support.v4.widget.NestedScrollView>
-
-    <android.support.design.widget.FloatingActionButton
-        android:id="@+id/fab_search_recipes"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="bottom|right"
-        android:layout_marginEnd="16dp"
-        android:layout_marginRight="16dp"
-        android:layout_marginBottom="65dp"
-        android:contentDescription="Search Using Ingredients"
-        android:src="@drawable/ic_search_foreground"
-        app:fabSize="mini"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent" />
 
 </android.support.constraint.ConstraintLayout>
