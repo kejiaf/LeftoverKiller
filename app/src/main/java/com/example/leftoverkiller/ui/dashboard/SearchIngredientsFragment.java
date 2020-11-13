@@ -47,7 +47,9 @@ public class SearchIngredientsFragment extends Fragment {
     private RecyclerView.Adapter mAdapter;
     private RecyclerView.LayoutManager layoutManager;
     private ArrayList<String> selectedIngredientDataset = new ArrayList<>(); // TODO: placeholder!
-    private List<Ingredient> availableIngredients;
+    private List<Ingredient> availableIngredients = new ArrayList<>();
+    private List<Integer> availableIngredientsIDs = new ArrayList<>();
+    private List<Integer> ingredientIDs = new ArrayList<>();
     private AutoCompleteTextView autoTextView;
     private Set<String> availableIngredientSet = new HashSet();
     private Set<String> selectedIngredientSet = new HashSet();
@@ -82,10 +84,6 @@ public class SearchIngredientsFragment extends Fragment {
         layoutManager = new LinearLayoutManager(getActivity());
         recyclerView.setLayoutManager(layoutManager);
 
-        // If dataset is not null, add adapter
-        buildRecyclerView();
-
-
         autoTextView = (AutoCompleteTextView)
                 getView().findViewById(R.id.ingredients_search_auto_complete);
         autoTextView.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
@@ -115,6 +113,10 @@ public class SearchIngredientsFragment extends Fragment {
 
 
         callAPI();
+
+        // If dataset is not null, add adapter
+        buildRecyclerView();
+
         // Set up floating action button
         // TODO: search for recipes!
         fabSearch.setOnClickListener(new View.OnClickListener() {
@@ -144,7 +146,7 @@ public class SearchIngredientsFragment extends Fragment {
         if (selectedIngredientDataset != null && selectedIngredientDataset.size() == 0) {
             // Adapter for recycler view
             mAdapter = new IngredientsAdapter(selectedIngredientDataset, selectedIngredientSet,
-                    tvEmptyWarning, recyclerView);
+                    tvEmptyWarning, recyclerView, availableIngredientsIDs, availableIngredients);
             recyclerView.setAdapter(mAdapter);
         }
 
@@ -165,12 +167,14 @@ public class SearchIngredientsFragment extends Fragment {
             @Override
             public void onResponse(Call<IngredientListResponse> call, Response<IngredientListResponse> response) {
                 if (response.body().getIngredients() != null) {
-                    availableIngredients = response.body().getIngredients();
+                    List<Ingredient> listResponse = response.body().getIngredients();
+                    availableIngredients.addAll(listResponse);
                     availableIngredientSet.clear();
                     List<String> ingredientList = new ArrayList<>();
                     for (Ingredient ingredient : availableIngredients) {
                         ingredientList.add(ingredient.getName());
                         availableIngredientSet.add(ingredient.getName());
+                        availableIngredientsIDs.add( ingredient.getIngredientId() );
                     }
                     // Set up autocomplete text view
                     ArrayAdapter<String> autoTextAdapter = new ArrayAdapter<String>(getContext(),

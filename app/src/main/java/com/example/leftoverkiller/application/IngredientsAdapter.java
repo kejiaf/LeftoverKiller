@@ -1,6 +1,8 @@
 package com.example.leftoverkiller.application;
 
+import android.content.Intent;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -8,6 +10,7 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.example.leftoverkiller.IngredientDetailsActivity;
 import com.example.leftoverkiller.R;
 import com.example.leftoverkiller.model.Ingredient;
 
@@ -19,6 +22,8 @@ public class IngredientsAdapter extends
         RecyclerView.Adapter<IngredientsAdapter.MyViewHolder>
 {
     private List<String> ingredientsDataset; //TODO: change to Ingredient later
+    private List<Integer> ingredientsIDs;
+    private List<Ingredient> availableIngredients = new ArrayList<>();
     Set<String> ingredientSet;
     TextView emptyWarn;
     RecyclerView recyclerView;
@@ -40,11 +45,14 @@ public class IngredientsAdapter extends
 
     // Provide a suitable constructor (depends on the kind of dataset)
     public IngredientsAdapter(ArrayList<String> ingredientsDataset, Set<String> selectedIngredientSet,
-                              TextView emptyWarn, RecyclerView recyclerView ) {
+                              TextView emptyWarn, RecyclerView recyclerView, List<Integer> ingredientsIDs,
+                              List<Ingredient> availableIngredients) {
         this.ingredientsDataset = ingredientsDataset;
         this.ingredientSet = selectedIngredientSet;
         this.emptyWarn = emptyWarn;
         this.recyclerView = recyclerView;
+        this.ingredientsIDs = ingredientsIDs;
+        this.availableIngredients = availableIngredients;
     }
 
     public List<String> getIngredients(){
@@ -69,7 +77,7 @@ public class IngredientsAdapter extends
     public void onBindViewHolder(final MyViewHolder holder, final int position)
     {
         //TODO: set textview or something similar to start off with
-        TextView ingredientName = holder.linearLayout.findViewById(R.id.ingredient_name);
+        final TextView ingredientName = holder.linearLayout.findViewById(R.id.ingredient_name);
         ingredientName.setText( ingredientsDataset.get(position) );
 
         ImageView ingredientImage = holder.linearLayout.findViewById(R.id.avatar);
@@ -87,6 +95,27 @@ public class IngredientsAdapter extends
                     recyclerView.setVisibility(View.GONE);
                     emptyWarn.setVisibility(View.VISIBLE);
                 }
+            }
+        });
+
+        ingredientName.setOnClickListener( new View.OnClickListener() {
+            @Override
+            public void onClick(View view)
+            {
+                Intent intent = new Intent(view.getContext(), IngredientDetailsActivity.class);
+                int ingredientID = -1;
+                // Search for ingredient in available ingredients using ingredient name
+                int i = 0;
+                for( Ingredient ingredient : availableIngredients )
+                {
+                    if( ingredient.getName() == ingredientsDataset.get(holder.getAdapterPosition()) )
+                    {
+                        ingredientID = availableIngredients.get(i).getIngredientId();
+                    }
+                    i++;
+                }
+                intent.putExtra("INGREDIENT_ID", ingredientID );
+                view.getContext().startActivity(intent);
             }
         });
     }
