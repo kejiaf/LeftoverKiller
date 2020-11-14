@@ -23,7 +23,7 @@
             android:name=".RecipeDetailsActivity"
             android:configChanges="orientation"
             android:screenOrientation="portrait"
-            android:theme="@style/AppTheme.NoActionBar" />
+            android:theme="@style/Theme.AppCompat.Light.NoActionBar" />
         <activity
             android:name=".MainActivity"
             android:configChanges="orientation"
