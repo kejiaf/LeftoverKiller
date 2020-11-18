@@ -89,6 +89,11 @@ public class IngredientDetailsActivity extends AppCompatActivity {
             @Override
             public void onResponse(Call<Ingredient> call, Response<Ingredient> response) {
                 ingredientName.setText( response.body().getName() );
+                if(!response.body().getSuccess()){
+                    Toast.makeText(getActivity(), response.body().getError(), Toast.LENGTH_SHORT).show();
+                    return;
+                }
+
                 Log.i("debug_me", "list of recipe debug" );
                 if (response.body().getTopRecipes() != null) {
                     listOfRecipes.addAll( response.body().getTopRecipes() ); // TODO: top recipes null?
@@ -96,6 +101,9 @@ public class IngredientDetailsActivity extends AppCompatActivity {
 
                     buildRecyclerView();
                     //List<String> ingredientList = new ArrayList<>();
+                }else{
+                    recyclerView.setVisibility(View.VISIBLE);
+//                    tvEmptyWarning.setVisibility(View.GONE);
                 }
             }
 

@@ -21,12 +21,16 @@ public class Ingredient {
     @SerializedName("success")
     Boolean success;
 
-    public Ingredient(int ingredientId, String name, String imageURL, List<Recipe> topRecipes, Boolean success) {
+    @SerializedName("error")
+    String error;
+
+    public Ingredient(int ingredientId, String name, String imageURL, List<Recipe> topRecipes, Boolean success, String error) {
         this.ingredientId = ingredientId;
         this.name = name;
         this.imageURL = imageURL;
         this.topRecipes = topRecipes;
         this.success = success;
+        this.error = error;
     }
 
     public int getIngredientId() {
@@ -43,5 +47,13 @@ public class Ingredient {
 
     public List<Recipe> getTopRecipes() {
         return topRecipes;
+    }
+
+    public Boolean getSuccess() {
+        return success;
+    }
+
+    public String getError() {
+        return error;
     }
 }
