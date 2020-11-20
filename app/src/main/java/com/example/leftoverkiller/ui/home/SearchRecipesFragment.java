@@ -57,6 +57,7 @@ public class SearchRecipesFragment extends Fragment {
     private RecipesAdapter mAdapter;
     private RecyclerView.LayoutManager layoutManager;
     private SearchView searchView;
+    private TextView  tvEmptyWarning;
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
@@ -70,6 +71,7 @@ public class SearchRecipesFragment extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         recyclerView = (RecyclerView) getView().findViewById(R.id.recipes_recycler_view);
+        tvEmptyWarning = getView().findViewById(R.id.recipes_label);
 
         layoutManager = new LinearLayoutManager(this.getContext());
         recyclerView.setLayoutManager(layoutManager);
@@ -145,9 +147,6 @@ public class SearchRecipesFragment extends Fragment {
             @Override
             public boolean onQueryTextChange(String s) {
                 mAdapter.getFilter().filter(s);
-                if(mAdapter.getItemCount() == 0){
-                    Toast.makeText(getContext(), "No Recipes Found", Toast.LENGTH_SHORT).show();
-                }
                 return false;
             }
         });

@@ -3,6 +3,7 @@ package com.example.leftoverkiller.ui.dashboard;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
+import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -157,6 +158,8 @@ public class SearchIngredientsFragment extends Fragment {
             mAdapter = new IngredientsAdapter(selectedIngredientDataset, selectedIngredientSet,
                     tvEmptyWarning, recyclerView, availableIngredientsIDs, availableIngredients);
             recyclerView.setAdapter(mAdapter);
+            DividerItemDecoration dividerItemDecoration = new DividerItemDecoration(this.getContext(), DividerItemDecoration.VERTICAL);
+            recyclerView.addItemDecoration(dividerItemDecoration);
         }
 
         // Hide recycler view if empty and replace with an empty dataset message

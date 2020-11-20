@@ -117,6 +117,11 @@ public class RecipesAdapter extends
         protected void publishResults(CharSequence charSequence, FilterResults filterResults) {
                 recipesList.clear();
                 recipesList.addAll((Collection<? extends Recipe>) filterResults.values);
+
+                if(recipesList.size() == 0){
+                    Toast.makeText(mcontext, "No Recipe Found", Toast.LENGTH_SHORT).show();
+                }
+
                 notifyDataSetChanged();
         }
     };

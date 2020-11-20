@@ -2,6 +2,7 @@ package com.example.leftoverkiller;
 
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -72,6 +73,8 @@ public class IngredientDetailsActivity extends AppCompatActivity {
             // Adapter for recycler view
             mAdapter = new RecipeWithIngredientAdapter(listOfRecipes);
             recyclerView.setAdapter(mAdapter);
+            DividerItemDecoration dividerItemDecoration = new DividerItemDecoration(this, DividerItemDecoration.VERTICAL);
+            recyclerView.addItemDecoration(dividerItemDecoration);
         }
 
         // Hide recycler view if empty and replace with an empty dataset message
