@@ -16,16 +16,23 @@
 
     </LinearLayout>
 
-    <TextView
-        android:id="@+id/ingredient_name"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center_vertical"
-        android:layout_marginStart="8dp"
-        android:layout_marginLeft="8dp"
-        android:ellipsize="end"
-        android:text="ingredient name"
-        android:textSize="18sp"></TextView>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:id="@+id/ingredient_info_ll">
+
+        <TextView
+            android:id="@+id/ingredient_name"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:layout_marginStart="16dp"
+            android:layout_marginLeft="16dp"
+            android:ellipsize="end"
+            android:text="ingredient name"
+            android:textSize="18sp"></TextView>
+
+    </LinearLayout>
 
 
 </LinearLayout>

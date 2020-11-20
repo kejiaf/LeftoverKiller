@@ -78,6 +78,7 @@ public class IngredientsAdapter extends
     {
         //TODO: set textview or something similar to start off with
         final TextView ingredientName = holder.linearLayout.findViewById(R.id.ingredient_name);
+        LinearLayout ingredientInfo = holder.linearLayout.findViewById(R.id.ingredient_info_ll);
         ingredientName.setText( ingredientsDataset.get(position) );
 
         ImageView ingredientImage = holder.linearLayout.findViewById(R.id.avatar);
@@ -98,7 +99,7 @@ public class IngredientsAdapter extends
             }
         });
 
-        ingredientName.setOnClickListener( new View.OnClickListener() {
+        ingredientInfo.setOnClickListener( new View.OnClickListener() {
             @Override
             public void onClick(View view)
             {

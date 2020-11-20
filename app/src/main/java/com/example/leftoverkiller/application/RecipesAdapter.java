@@ -39,8 +39,8 @@ public class RecipesAdapter extends
             linearLayout = v;
         }
     }
-    
-    public List<Recipe> getRecipesList(){
+
+    public List<Recipe> getRecipesList() {
         return recipesListAll;
     }
 
@@ -64,7 +64,7 @@ public class RecipesAdapter extends
         TextView recipeName = myViewHolder.linearLayout.findViewById(R.id.recipe_name);
         ImageView recipeImage = myViewHolder.linearLayout.findViewById(R.id.avatar);
         recipeName.setText(recipesList.get(i).getName());
-        Picasso.get().load(recipesList.get(i).getImageUrl()).fit().centerCrop().into(recipeImage);
+        Picasso.get().load(recipesList.get(i).getImageURL()).fit().centerCrop().into(recipeImage);
         final int recipeId = recipesList.get(i).getRecipeId();
         final Context context = myViewHolder.linearLayout.getContext();
 
@@ -72,7 +72,7 @@ public class RecipesAdapter extends
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent(context, RecipeDetailsActivity.class);
-                intent.putExtra("recipeID",recipeId );
+                intent.putExtra("recipeID", recipeId);
                 context.startActivity(intent);
             }
         });
@@ -88,7 +88,7 @@ public class RecipesAdapter extends
         return filter;
     }
 
-    public int RecipeID(int position){
+    public int RecipeID(int position) {
         return recipesList.get(position).getRecipeId();
     }
 

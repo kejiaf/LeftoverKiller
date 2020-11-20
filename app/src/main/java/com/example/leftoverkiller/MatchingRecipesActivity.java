@@ -125,13 +125,12 @@ public class MatchingRecipesActivity extends AppCompatActivity {
     }
 
     private void callAPI() {
-        IngredientListRequest request = new IngredientListRequest(ingredientList);
+        final IngredientListRequest request = new IngredientListRequest(ingredientList);
         Call<RecipeListResponse> call = ((LeftoverKillerApplication) getApplication()).apiService.getMatchingRecipes(request);
         call.enqueue(new Callback<RecipeListResponse>() {
             @Override
             public void onResponse(Call<RecipeListResponse> call, Response<RecipeListResponse> response) {
-                if (response.body().getRecipes() != null) {
-
+                if (response.body().getRecipes() != null && response.body().getRecipes().size() != 0) {
                     recipeDataset = response.body().getRecipes();
                     // If dataset is not null, add adapter
                     Log.i("ingredientlist", "ingredient data not null with size " + recipeDataset.size());
@@ -153,16 +152,17 @@ public class MatchingRecipesActivity extends AppCompatActivity {
 
                     // If dataset is not null, add adapter
                     buildRecyclerView(recipeDataset);
-
-
+                } else {
+                    if (response.body().getError() != null)
+                        label.setText(response.body().getError());
+                    else
+                        label.setText("Matching Recipes Found: " + "0");
                 }
-                label.setText("Matching Recipes Found: " + (recipeDataset != null ? recipeDataset.size() : "0"));
             }
 
             @Override
             public void onFailure(Call<RecipeListResponse> call, Throwable t) {
-                label.setText("Matching Recipes Found: " + (recipeDataset != null ? recipeDataset.size() : "0"));
-                Toast.makeText(MatchingRecipesActivity.this, "No matching Recipes found", Toast.LENGTH_SHORT).show();
+                Toast.makeText(MatchingRecipesActivity.this, "Connection error, please check your network", Toast.LENGTH_SHORT).show();
             }
         });
     }

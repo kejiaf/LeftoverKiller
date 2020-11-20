@@ -26,13 +26,17 @@ public class Recipe {
     @SerializedName("success")
     Boolean success;
 
-    public Recipe(int recipeId, String name, List<Ingredient> ingredients, String imageURL, String instructions, Boolean success) {
+    @SerializedName("error")
+    String error;
+
+    public Recipe(int recipeId, String name, List<Ingredient> ingredients, String imageURL, String instructions, Boolean success, String error) {
         this.recipeId = recipeId;
         this.name = name;
         this.ingredients = ingredients;
         this.imageURL = imageURL;
         this.instructions = instructions;
         this.success = success;
+        this.error = error;
     }
 
     public int getRecipeId() {
@@ -47,7 +51,7 @@ public class Recipe {
         return ingredients;
     }
 
-    public String getImageUrl() {
+    public String getImageURL() {
         return imageURL;
     }
 
@@ -55,5 +59,11 @@ public class Recipe {
         return instructions;
     }
 
+    public Boolean getSuccess() {
+        return success;
+    }
 
+    public String getError() {
+        return error;
+    }
 }

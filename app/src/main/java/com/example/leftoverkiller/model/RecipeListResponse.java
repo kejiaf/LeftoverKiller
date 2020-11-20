@@ -12,9 +12,13 @@ public class RecipeListResponse {
     @SerializedName("recipes")
     List<Recipe> recipes;
 
-    public RecipeListResponse(Boolean success, List<Recipe> recipes) {
+    @SerializedName("error")
+    String error;
+
+    public RecipeListResponse(Boolean success, List<Recipe> recipes, String error) {
         this.success = success;
         this.recipes = recipes;
+        this.error = error;
     }
 
     public Boolean getSuccess() {
@@ -23,5 +27,9 @@ public class RecipeListResponse {
 
     public List<Recipe> getRecipes() {
         return recipes;
+    }
+
+    public String getError() {
+        return error;
     }
 }
