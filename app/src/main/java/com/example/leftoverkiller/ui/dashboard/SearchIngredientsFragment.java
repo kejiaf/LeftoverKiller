@@ -122,9 +122,18 @@ public class SearchIngredientsFragment extends Fragment {
         fabSearch.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent searchIntent = new Intent(getActivity(), MatchingRecipesActivity.class);
-                searchIntent.putExtra("ingredient_list", selectedIngredientDataset);
-                getActivity().startActivity(searchIntent);
+                // if there is at least on selected ingredient, do search, otherwise display msg
+                if( selectedIngredientDataset != null && selectedIngredientDataset.size() > 0 ) {
+                    Intent searchIntent = new Intent(getActivity(), MatchingRecipesActivity.class);
+                    searchIntent.putExtra("ingredient_list", selectedIngredientDataset);
+                    getActivity().startActivity(searchIntent);
+                }
+                else
+                {
+                    Toast.makeText( getActivity(), "You must select at least one ingredient." +
+                            " Select an ingredient from the search bar and try " +
+                            "again.", Toast.LENGTH_SHORT).show();
+                }
             }
         });
 
@@ -175,17 +184,24 @@ public class SearchIngredientsFragment extends Fragment {
                     for (Ingredient ingredient : availableIngredients) {
                         ingredientList.add(ingredient.getName());
                         availableIngredientSet.add(ingredient.getName());
-                        availableIngredientsIDs.add(ingredient.getIngredientId());
+                        availableIngredientsIDs.add( ingredient.getIngredientId() );
                     }
                     // Set up autocomplete text view
                     ArrayAdapter<String> autoTextAdapter = new ArrayAdapter<String>(getContext(),
                             android.R.layout.simple_dropdown_item_1line, ingredientList);
                     autoTextView.setAdapter(autoTextAdapter);
-                } else {
-                    if (ingredientListResponse.getError() != null && !ingredientListResponse.getError().isEmpty())
-                        Toast.makeText(getActivity(), ingredientListResponse.getError(), Toast.LENGTH_SHORT).show();
-                    else
-                        Toast.makeText(getActivity(), "Something went wrong, Please try again!", Toast.LENGTH_SHORT).show();
+                }
+                else if( response.body().getSuccess() == false )
+                {
+                    // TODO: fix getError() in following lines:
+                    Toast.makeText( getActivity(), "Was able to contact server, but " +
+                            "something went wrong with fetching available ingredients (" +
+                            response.body().getError() + ").", Toast.LENGTH_SHORT ).show();
+                }
+                else if( response.body().getIngredients() == null )
+                {
+                    Toast.makeText( getActivity(), "Was able to contact server, but could not " +
+                            "get list of available ingredients.", Toast.LENGTH_SHORT).show();
                 }
             }
 
@@ -197,13 +213,24 @@ public class SearchIngredientsFragment extends Fragment {
     }
 
     private void addToRecyclerView(String ingredient) {
+        if(ingredient.equalsIgnoreCase("") || ingredient == null) // if ingredient is empty string
+        {
+            Toast.makeText(getActivity(), "Ingredient field is empty, please type in or " +
+                    "select an ingredient to add it to the list.", Toast.LENGTH_SHORT).show();
+            return;
+        }
+
+        // if entered ingredient does not match predefined entry
         if (!availableIngredientSet.contains(ingredient)) {
             Toast.makeText(getActivity(), "Ingredient not available", Toast.LENGTH_SHORT).show();
             return;
         }
 
-        if (selectedIngredientSet.contains(ingredient))
+        // if ingredient has already been selected
+        if (selectedIngredientSet.contains(ingredient)) {
+            Toast.makeText(getActivity(), "Ingredient has already been added.", Toast.LENGTH_SHORT).show();
             return;
+        }
         else if (selectedIngredientDataset.isEmpty()) {
             selectedIngredientDataset.add(ingredient);
             selectedIngredientSet.add(ingredient);

@@ -104,21 +104,24 @@ public class IngredientDetailsActivity extends AppCompatActivity {
                         Log.i("debug_me", "list of recipe debug" );
                     }
                 });
-                if(!response.body().getSuccess()){
-                    Toast.makeText(getActivity(), response.body().getError(), Toast.LENGTH_SHORT).show();
+                if( !response.body().getSuccess() )
+                {
+                    Toast.makeText(getActivity(), "Error in getting top recipes: " +
+                            response.body().getError(), Toast.LENGTH_SHORT).show();
                     return;
                 }
 
                 Log.i("debug_me", "list of recipe debug" );
                 if (response.body().getTopRecipes() != null) {
-                    listOfRecipes.addAll( response.body().getTopRecipes() ); // TODO: top recipes null?
+                    listOfRecipes.addAll( response.body().getTopRecipes() );
                     Log.i("debug_me", "list of recipe debug inside " + listOfRecipes.get(0).getName() );
 
                     buildRecyclerView();
                     //List<String> ingredientList = new ArrayList<>();
-                }else{
-                    recyclerView.setVisibility(View.VISIBLE);
-//                    tvEmptyWarning.setVisibility(View.GONE);
+                }
+                else {
+                    Toast.makeText( getActivity(), "Was able to contact server, but could not " +
+                            "get list of top recipes.", Toast.LENGTH_SHORT).show();
                 }
             }
 
