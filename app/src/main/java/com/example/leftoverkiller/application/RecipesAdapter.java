@@ -13,6 +13,7 @@ import android.widget.Filterable;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.leftoverkiller.R;
 import com.example.leftoverkiller.RecipeDetailsActivity;
@@ -28,6 +29,7 @@ public class RecipesAdapter extends
         RecyclerView.Adapter<com.example.leftoverkiller.application.RecipesAdapter.MyViewHolder> implements Filterable {
     private List<Recipe> recipesList;
     private List<Recipe> recipesListAll;
+    Context mcontext;
 
     public static class MyViewHolder extends RecyclerView.ViewHolder {
         public LinearLayout linearLayout;
@@ -42,9 +44,10 @@ public class RecipesAdapter extends
         return recipesListAll;
     }
 
-    public RecipesAdapter(List<Recipe> recipesList) {
+    public RecipesAdapter(List<Recipe> recipesList, Context context) {
         this.recipesList = recipesList;
         this.recipesListAll = new ArrayList<>(recipesList);
+        mcontext = context;
     }
 
     @NonNull
@@ -64,6 +67,7 @@ public class RecipesAdapter extends
         Picasso.get().load(recipesList.get(i).getImageUrl()).fit().centerCrop().into(recipeImage);
         final int recipeId = recipesList.get(i).getRecipeId();
         final Context context = myViewHolder.linearLayout.getContext();
+
         myViewHolder.linearLayout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -105,14 +109,15 @@ public class RecipesAdapter extends
 
             FilterResults filterResults = new FilterResults();
             filterResults.values = filterList;
+
             return filterResults;
         }
 
         @Override
         protected void publishResults(CharSequence charSequence, FilterResults filterResults) {
-            recipesList.clear();
-            recipesList.addAll((Collection<? extends Recipe>) filterResults.values);
-            notifyDataSetChanged();
+                recipesList.clear();
+                recipesList.addAll((Collection<? extends Recipe>) filterResults.values);
+                notifyDataSetChanged();
         }
     };
 

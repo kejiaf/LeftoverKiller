@@ -8,6 +8,7 @@ import android.support.v4.view.GestureDetectorCompat;
 import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.GestureDetector;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -16,6 +17,7 @@ import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Filter;
 import android.widget.SearchView;
 import android.widget.TextView;
 import android.support.annotation.NonNull;
@@ -143,6 +145,9 @@ public class SearchRecipesFragment extends Fragment {
             @Override
             public boolean onQueryTextChange(String s) {
                 mAdapter.getFilter().filter(s);
+                if(mAdapter.getItemCount() == 0){
+                    Toast.makeText(getContext(), "No Recipes Found", Toast.LENGTH_SHORT).show();
+                }
                 return false;
             }
         });
@@ -157,10 +162,11 @@ public class SearchRecipesFragment extends Fragment {
             @Override
             public void onResponse(Call<RecipeListResponse> call, Response<RecipeListResponse> response) {
                 if (response.body().getRecipes() != null) {
-                    mAdapter = new RecipesAdapter(response.body().getRecipes());
+                    mAdapter = new RecipesAdapter(response.body().getRecipes(), getContext());
                     recyclerView.setAdapter(mAdapter);
                 } else {
                     recyclerView.setVisibility(View.GONE);
+                    Toast.makeText(getContext(), "No Recipes Found", Toast.LENGTH_SHORT).show();
                 }
             }
             @Override

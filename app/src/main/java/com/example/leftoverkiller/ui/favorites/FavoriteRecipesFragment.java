@@ -73,7 +73,7 @@ public class FavoriteRecipesFragment extends Fragment {
             label.setVisibility(View.VISIBLE);
             recyclerView.setVisibility(View.GONE);
         } else {
-            mAdapter = new RecipesAdapter(recipes);
+            mAdapter = new RecipesAdapter(recipes, getContext());
             recyclerView.setAdapter(mAdapter);
             label.setVisibility(View.GONE);
             recyclerView.setVisibility(View.VISIBLE);
