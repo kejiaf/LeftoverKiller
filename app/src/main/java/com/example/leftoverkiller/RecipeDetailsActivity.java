@@ -92,7 +92,7 @@ public class RecipeDetailsActivity extends AppCompatActivity {
 
                     List<Ingredient> list = response.body().getIngredients();
                     StringBuilder ingredientList = new StringBuilder();
-                    for(Ingredient a: list){
+                    for (Ingredient a : list) {
                         ingredientList.append("    ");
                         ingredientList.append(a.getName());
                         ingredientList.append(System.getProperty("line.separator"));
@@ -117,8 +117,7 @@ public class RecipeDetailsActivity extends AppCompatActivity {
                             if (Utils.isRecipeInFavorites(recipeID, getApplicationContext())) {
                                 Utils.removeFromFavorites(recipeID, getApplicationContext());
                                 addToFavList.setImageResource(R.drawable.ic_baseline_add_24);
-                            }
-                            else {
+                            } else {
                                 Utils.addRecipe(response.body(), getApplicationContext());
                                 addToFavList.setImageResource(R.drawable.ic_baseline_remove_24);
                             }
@@ -127,21 +126,21 @@ public class RecipeDetailsActivity extends AppCompatActivity {
 
 
                     //Picasso.get().load(response.body().getImageUrl()).fit().centerCrop().into(recipeImage);
-                    Picasso.get().load(response.body().getImageUrl()).fit().centerCrop().into(recipeImage,
+                    Picasso.get().load(response.body().getImageURL()).fit().centerCrop().into(recipeImage,
                             new com.squareup.picasso.Callback() {
-                        @Override
-                        public void onSuccess() {
-                            collapsingToolbarLayout.setBackground(recipeImage.getDrawable());
-                        }
+                                @Override
+                                public void onSuccess() {
+                                    collapsingToolbarLayout.setBackground(recipeImage.getDrawable());
+                                }
 
-                        @Override
-                        public void onError(Exception e) {
+                                @Override
+                                public void onError(Exception e) {
 
-                        }
-                    });
+                                }
+                            });
                 } else {
                     //addToFavList.setVisibility(View.GONE);
-                    Toast.makeText(getApplicationContext(), "Please check your network connection!", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getApplicationContext(), response.body().getError() != null ? response.body().getError() : "Please check your network connection!", Toast.LENGTH_SHORT).show();
                 }
             }
 

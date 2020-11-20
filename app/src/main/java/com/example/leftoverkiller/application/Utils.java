@@ -32,7 +32,7 @@ public class Utils {
                 if (recipeItem.getRecipeId() == recipe.getRecipeId())
                     return true;
         recipes.add(recipe);
-        RecipeListResponse recipeListResponse = new RecipeListResponse(true, recipes);
+        RecipeListResponse recipeListResponse = new RecipeListResponse(true, recipes, null);
         String json = ((LeftoverKillerApplication) context.getApplicationContext()).gson.toJson(recipeListResponse);
         SharedPreferences mPrefs = context.getSharedPreferences(context.getPackageName(), MODE_PRIVATE);
         mPrefs.edit().putString("favorites", json).commit();
@@ -42,7 +42,7 @@ public class Utils {
 
     public static boolean isRecipeInFavorites(int recipeID, Context context) {
         List<Recipe> recipes = fetchFavorites(context);
-        if(recipes == null) return false;
+        if (recipes == null || recipes.size() == 0) return false;
 
         for (Recipe recipeItem : recipes)
             if (recipeItem.getRecipeId() == recipeID)
@@ -59,7 +59,7 @@ public class Utils {
         if (position == -1)
             return false;
         recipes.remove(position);
-        RecipeListResponse recipeListResponse = new RecipeListResponse(true, recipes);
+        RecipeListResponse recipeListResponse = new RecipeListResponse(true, recipes, null);
         String json = ((LeftoverKillerApplication) context.getApplicationContext()).gson.toJson(recipeListResponse);
         SharedPreferences mPrefs = context.getSharedPreferences(context.getPackageName(), MODE_PRIVATE);
         return mPrefs.edit().putString("favorites", json).commit();

@@ -57,7 +57,7 @@ public class RecipeWithIngredientAdapter extends
         TextView recipeName = holder.linearLayout.findViewById(R.id.recipe_name);
         ImageView recipeImage = holder.linearLayout.findViewById(R.id.avatar);
         recipeName.setText(recipesList.get(position).getName());
-        String imageURL = recipesList.get(position).getImageUrl();
+        String imageURL = recipesList.get(position).getImageURL();
         if (imageURL != null && !imageURL.isEmpty())
             Picasso.get().load(imageURL).fit().centerCrop().into(recipeImage);
         final int recipeId = recipesList.get(position).getRecipeId();

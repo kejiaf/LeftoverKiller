@@ -7,6 +7,7 @@ import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.View;
 import android.widget.ArrayAdapter;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -16,6 +17,7 @@ import com.example.leftoverkiller.application.RecipeWithIngredientAdapter;
 import com.example.leftoverkiller.model.Ingredient;
 import com.example.leftoverkiller.model.IngredientListResponse;
 import com.example.leftoverkiller.model.Recipe;
+import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -32,6 +34,7 @@ public class IngredientDetailsActivity extends AppCompatActivity {
     private RecyclerView.LayoutManager layoutManager;
 
     private TextView ingredientName;
+    ImageView ingredientImage;
 
     private List<Recipe> listOfRecipes = new ArrayList<>();
 
@@ -41,6 +44,7 @@ public class IngredientDetailsActivity extends AppCompatActivity {
         setContentView(R.layout.activity_ingredient_details);
         ingredientID = getIntent().getIntExtra( "INGREDIENT_ID" , -1 );
         ingredientName = this.findViewById(R.id.ingredient_detail_name);
+        ingredientImage = findViewById(R.id.ingredient_image);
 
         recyclerView = (RecyclerView) findViewById(R.id.recipes_recycler_view);
 
@@ -89,6 +93,17 @@ public class IngredientDetailsActivity extends AppCompatActivity {
             @Override
             public void onResponse(Call<Ingredient> call, Response<Ingredient> response) {
                 ingredientName.setText( response.body().getName() );
+                Picasso.get().load(response.body().getImageURL()).fit().centerCrop().into(ingredientImage, new com.squareup.picasso.Callback() {
+                    @Override
+                    public void onSuccess() {
+                        Log.i("debug_me", "list of recipe debug" );
+                    }
+
+                    @Override
+                    public void onError(Exception e) {
+                        Log.i("debug_me", "list of recipe debug" );
+                    }
+                });
                 if(!response.body().getSuccess()){
                     Toast.makeText(getActivity(), response.body().getError(), Toast.LENGTH_SHORT).show();
                     return;

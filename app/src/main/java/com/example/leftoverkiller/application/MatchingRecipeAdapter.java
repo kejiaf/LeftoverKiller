@@ -63,7 +63,7 @@ public class MatchingRecipeAdapter extends
         TextView recipeName = holder.linearLayout.findViewById(R.id.recipe_name);
         ImageView image = holder.linearLayout.findViewById(R.id.recipe_image);//TODO: change to recipe_name
         recipeName.setText(mathcingRecipeDataset.get(position).getName());
-        Picasso.get().load(mathcingRecipeDataset.get(position).getImageUrl()).fit().centerCrop().into(image);
+        Picasso.get().load(mathcingRecipeDataset.get(position).getImageURL()).fit().centerCrop().into(image);
 
     }
 

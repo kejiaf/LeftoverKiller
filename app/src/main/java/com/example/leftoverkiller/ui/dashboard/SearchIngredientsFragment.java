@@ -166,7 +166,8 @@ public class SearchIngredientsFragment extends Fragment {
         call.enqueue(new Callback<IngredientListResponse>() {
             @Override
             public void onResponse(Call<IngredientListResponse> call, Response<IngredientListResponse> response) {
-                if (response.body().getIngredients() != null) {
+                IngredientListResponse ingredientListResponse = response.body();
+                if (ingredientListResponse.getSuccess() && ingredientListResponse.getIngredients() != null && ingredientListResponse.getIngredients().size() != 0) {
                     List<Ingredient> listResponse = response.body().getIngredients();
                     availableIngredients.addAll(listResponse);
                     availableIngredientSet.clear();
@@ -174,12 +175,17 @@ public class SearchIngredientsFragment extends Fragment {
                     for (Ingredient ingredient : availableIngredients) {
                         ingredientList.add(ingredient.getName());
                         availableIngredientSet.add(ingredient.getName());
-                        availableIngredientsIDs.add( ingredient.getIngredientId() );
+                        availableIngredientsIDs.add(ingredient.getIngredientId());
                     }
                     // Set up autocomplete text view
                     ArrayAdapter<String> autoTextAdapter = new ArrayAdapter<String>(getContext(),
                             android.R.layout.simple_dropdown_item_1line, ingredientList);
                     autoTextView.setAdapter(autoTextAdapter);
+                } else {
+                    if (ingredientListResponse.getError() != null && !ingredientListResponse.getError().isEmpty())
+                        Toast.makeText(getActivity(), ingredientListResponse.getError(), Toast.LENGTH_SHORT).show();
+                    else
+                        Toast.makeText(getActivity(), "Something went wrong, Please try again!", Toast.LENGTH_SHORT).show();
                 }
             }
 
