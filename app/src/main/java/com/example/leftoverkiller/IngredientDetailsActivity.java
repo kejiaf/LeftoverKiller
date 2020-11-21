@@ -43,7 +43,7 @@ public class IngredientDetailsActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_ingredient_details);
-        ingredientID = getIntent().getIntExtra( "INGREDIENT_ID" , -1 );
+        ingredientID = getIntent().getIntExtra("INGREDIENT_ID", -1);
         ingredientName = this.findViewById(R.id.ingredient_detail_name);
         ingredientImage = findViewById(R.id.ingredient_image);
 
@@ -82,7 +82,7 @@ public class IngredientDetailsActivity extends AppCompatActivity {
             recyclerView.setVisibility(View.GONE);
             tvEmptyWarning.setVisibility(View.VISIBLE);
         } else {
-            Log.i("debug_me", "brv inside" );
+            Log.i("debug_me", "brv inside");
             recyclerView.setVisibility(View.VISIBLE);
             tvEmptyWarning.setVisibility(View.GONE);
             mAdapter.notifyDataSetChanged(); // needed so the recycler view actually shows new data
@@ -91,41 +91,26 @@ public class IngredientDetailsActivity extends AppCompatActivity {
 
     private void callAPI() {
 
-        Call<Ingredient> call = ((LeftoverKillerApplication) this.getApplication()).apiService.getIngredientDetails( ingredientID );
+        Call<Ingredient> call = ((LeftoverKillerApplication) this.getApplication()).apiService.getIngredientDetails(ingredientID);
         call.enqueue(new Callback<Ingredient>() {
             @Override
             public void onResponse(Call<Ingredient> call, Response<Ingredient> response) {
-                ingredientName.setText( response.body().getName() );
-                Picasso.get().load(response.body().getImageURL()).fit().centerCrop().into(ingredientImage, new com.squareup.picasso.Callback() {
-                    @Override
-                    public void onSuccess() {
-                        Log.i("debug_me", "list of recipe debug" );
-                    }
-
-                    @Override
-                    public void onError(Exception e) {
-                        Log.i("debug_me", "list of recipe debug" );
-                    }
-                });
-                if( !response.body().getSuccess() )
-                {
+                ingredientName.setText(response.body().getName());
+                Picasso.get().load(response.body().getImageURL()).fit().centerCrop().into(ingredientImage);
+                if (!response.body().getSuccess()) {
                     Toast.makeText(getActivity(), "Error in getting top recipes: " +
                             response.body().getError(), Toast.LENGTH_SHORT).show();
                     return;
                 }
 
-                Log.i("debug_me", "list of recipe debug" );
-                if (response.body().getTopRecipes() != null) {
-                    listOfRecipes.addAll( response.body().getTopRecipes() );
-                    Log.i("debug_me", "list of recipe debug inside " + listOfRecipes.get(0).getName() );
-
-                    buildRecyclerView();
-                    //List<String> ingredientList = new ArrayList<>();
-                }
-                else {
-                    Toast.makeText( getActivity(), "Was able to contact server, but could not " +
+                Log.i("debug_me", "list of recipe debug");
+                if (response.body().getTopRecipes() != null)
+                    listOfRecipes.addAll(response.body().getTopRecipes());
+                else
+                    Toast.makeText(getActivity(), "Was able to contact server, but could not " +
                             "get list of top recipes.", Toast.LENGTH_SHORT).show();
-                }
+
+                buildRecyclerView();
             }
 
             @Override
@@ -137,8 +122,7 @@ public class IngredientDetailsActivity extends AppCompatActivity {
 
     // created this for onFailure method in callAPI
     // onFailure would not accept "this" as the first argument
-    private AppCompatActivity getActivity()
-    {
+    private AppCompatActivity getActivity() {
         return this;
     }
 }
