@@ -1,14 +1,11 @@
 package com.example.leftoverkiller.ui.home;
 
-import android.app.Application;
 import android.content.Intent;
 import android.os.Bundle;
-import android.os.Parcelable;
 import android.support.v4.view.GestureDetectorCompat;
 import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.GestureDetector;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -17,36 +14,22 @@ import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Filter;
 import android.widget.SearchView;
 import android.widget.TextView;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
-import android.arch.lifecycle.Observer;
-import android.arch.lifecycle.ViewModelProviders;
 import android.widget.Toast;
 
-import com.example.leftoverkiller.MainActivity;
 import com.example.leftoverkiller.R;
 import com.example.leftoverkiller.RecipeDetailsActivity;
 import com.example.leftoverkiller.application.LeftoverKillerApplication;
 import com.example.leftoverkiller.application.RecipesAdapter;
-import com.example.leftoverkiller.model.Recipe;
-
-import java.util.ArrayList;
-import java.util.Arrays;
 
 import retrofit2.Call;
-import com.example.leftoverkiller.model.Recipe;
+
 import com.example.leftoverkiller.model.RecipeListResponse;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.List;
-
-import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
