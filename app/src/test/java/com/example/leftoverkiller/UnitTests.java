@@ -24,9 +24,9 @@ public class UnitTests {
 
         List<Recipe> list = new ArrayList<>();
         List<Ingredient> ingredients = new ArrayList<>();
-        Recipe recipe = new Recipe(1, "chicken", ingredients, "x", "x", true);
+        Recipe recipe = new Recipe(1, "chicken", ingredients, "x", "x", true, "");
         list.add(recipe);
-        RecipesAdapter adapter = new RecipesAdapter(list);
+        RecipesAdapter adapter = new RecipesAdapter(list, null);
         assertEquals("RecipeAdapter contains the added recipe", recipe.getName(), adapter.getRecipesList().get(0).getName());
 
     }
@@ -35,7 +35,7 @@ public class UnitTests {
     public void matchingRecipeAdapterTest() {
         List<Recipe> list = new ArrayList<>();
         List<Ingredient> ingredients = new ArrayList<>();
-        Recipe recipe = new Recipe(1, "chicken", ingredients, "x", "x", true);
+        Recipe recipe = new Recipe(1, "chicken", ingredients, "x", "x", true, "error");
         list.add(recipe);
         MatchingRecipeAdapter adapter = new MatchingRecipeAdapter(list);
         assertEquals("MatchingRecipeAdapter contains the added recipe", recipe.getName(), adapter.getMatchingRecipes().get(0).getName());
@@ -45,9 +45,9 @@ public class UnitTests {
     @Test
     public void ingredientAdapterTest() {
         ArrayList<String> ingredients = new ArrayList<>();
-        Ingredient ingredient = new Ingredient(1, "Tomato", "test_url", null, false);
+        Ingredient ingredient = new Ingredient(1, "Tomato", "test_url", null, false, "");
         ingredients.add(ingredient.getName());
-        IngredientsAdapter adapter = new IngredientsAdapter(ingredients, null, null, null);
+        IngredientsAdapter adapter = new IngredientsAdapter(ingredients, null, null, null, null,null);
         assertEquals("IngredientsAdapter contains the added recipe", ingredient.getName(), adapter.getIngredients().get(0));
     }
 }
