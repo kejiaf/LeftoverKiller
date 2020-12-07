@@ -62,7 +62,7 @@ public class NoResultsTest {
 //                                        0),
 //                                0),
 //                        isDisplayed()));
-        onView(withId(R.id.matching_recipes_label)).check(matches(withText("Missing ingredients")));
+//        onView(withId(R.id.matching_recipes_label)).check(matches(withText("Missing ingredients")));
     }
 
     private static Matcher<View> childAtPosition(
